@@ -14,7 +14,7 @@ delib.module {
         users.${username} = {
           isNormalUser = true;
           initialPassword = username;
-          extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" ];
+          extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" "adbusers" ];
         };
       };
     };

@@ -7,8 +7,9 @@ delib.rice {
     programs.noctalia.enable = true;
     programs.walker.enable = true;
     programs.audacity.enable = true;
-    programs.reaper.enable = true;
+    programs.reaper.enable = false;
     programs.virt.enable = true;
+    programs.tor.enable = true;
     programs.winapps.enable = true;
     programs.anytype.enable = false;
     programs.cosmic.enable = true;
