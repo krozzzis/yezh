@@ -5,8 +5,9 @@ delib.module {
   options = delib.singleEnableOption true;
 
   nixos.ifEnabled = {
-    services.udev.packages = with pkgs; [
+    environment.systemPackages = with pkgs; [
         android-tools
+        scrcpy
       ];
   };
 }
