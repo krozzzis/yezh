@@ -21,6 +21,12 @@ delib.module {
         ];
         open-maximized = true;
       }
+      {
+        matches = [
+          { app-id = "scrcpy"; }
+        ];
+        open-floating = true;
+      }
     ];
   };
 }

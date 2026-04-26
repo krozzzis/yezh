@@ -12,7 +12,9 @@ delib.rice {
     programs.tor.enable = true;
     programs.winapps.enable = true;
     programs.anytype.enable = false;
+    programs.android.enable = true;
     programs.kdeconnect.enable = true;
+    programs.yggdrasil.enable = true;
     programs.cosmic.enable = true;
     programs.vlc.enable = true;
     programs.obs.enable = true;
