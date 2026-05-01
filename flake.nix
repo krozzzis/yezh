@@ -15,6 +15,11 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     silentSDDM = {
       url = "github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -94,8 +99,6 @@
         };
     in
     {
-      # If you're not using NixOS, Home Manager, or Nix-Darwin,
-      # you can safely remove the corresponding lines below.
       nixosConfigurations = mkConfigurations "nixos";
       homeConfigurations = mkConfigurations "home";
     };
