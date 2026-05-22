@@ -7,7 +7,22 @@ delib.module {
   home.ifEnabled = {
     home.packages = with pkgs; [
       opencode
+      mcp-nixos
     ];
+
+    # programs.opencode = {
+    #   enable = true;
+    #   enableMcpIntegration = true;  # подтянет из programs.mcp.servers
+    # };
+
+    # или вручную в settings
+    # programs.opencode.settings = {
+    #   mcp.nixos = {
+    #     type = "local";
+    #     command = "mcp-nixos";
+    #     enabled = true;
+    #   };
+    # };
 
     # xdg.configFile."opencode/opencode.json".text = lib.generators.toJSON {
     #   # "$schema" = "https://opencode.ai/config.json";

@@ -10,6 +10,7 @@ delib.host {
       wezterm.enable = true;
       telegram.enable = true;
       librewolf.enable = true;
+      firefox.enable = true;
       throne.enable = true;
       zed.enable = true;
       zen-browser.enable = true;
@@ -22,5 +23,16 @@ delib.host {
   nixos = {
     zramSwap.enable = true;
     time.timeZone = "Asia/Yekaterinburg";
+
+    swapDevices = [ { device = "/swap/swapfile"; } ];
+    boot.resumeDevice = "/dev/mapper/cryptroot";
+    boot.kernelParams = [
+      "resume_offset=533760"
+    ];
+
+    powerManagement.enable = true;
+    services.power-profiles-daemon.enable = true;
+
+    services.myPower.enable = false;
   };
 }

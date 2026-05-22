@@ -1,4 +1,4 @@
-{ delib, inputs, ... }:
+{ delib, lib, pkgs, inputs, ... }:
 delib.module {
   name = "programs.dms";
 
@@ -11,7 +11,12 @@ delib.module {
     services.displayManager.dms-greeter = {
       enable = true;
       compositor.name = "niri";
+      configHome = "/home/krozzzis";
     };
+
+    environment.systemPackages = with pkgs; [
+      libappindicator
+    ];
   };
 
   home.ifEnabled = { myconfig, ...}: {
@@ -31,13 +36,13 @@ delib.module {
       enableVPN = true;                  # VPN management widget
       enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
       # enableAudioWavelength = true;      # Audio visualizer (cava)
-      # enableCalendarEvents = true;       # Calendar integration (khal)
+      enableCalendarEvents = true;       # Calendar integration (khal)
       # enableClipboardPaste = true;       # Pasting items from the clipboard (wtype)
 
-      settings = {
-        theme = "dark";
-        dynamicTheming = true;
-      };
+      settings = lib.importJSON ./settings.json;
+      # settings = builtins.fromJSON (builtins.readJSON ./settings.json);
     };
+
+    #systemd.user.services.niri-flake-polkit = { enable = false; };
   };
 }

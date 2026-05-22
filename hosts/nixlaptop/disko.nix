@@ -31,6 +31,7 @@ delib.host {
                 content = {
                   type = "luks";
                   name = "cryptroot";
+                  extraFormatArgs = [ "--label" "disk" ];
                   settings = {
                     # Allow TRIM on SSD through LUKS.
                     # Safe on modern drives; omit if HDD.

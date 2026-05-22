@@ -204,16 +204,13 @@ delib.module {
         "Mod+Space".action.toggle-window-floating = [ ];
 
         "Print".action.screenshot = [ ];
+        "Mod+Shift+S".action.screenshot = [ ];
         "Ctrl+Print".action.screenshot-screen = [ ];
         "Alt+Print".action.screenshot-window = [ ];
 
         # The quit action will show a confirmation dialog to avoid accidental exits.
         "Mod+Shift+E".action.quit = [ ];
         "Ctrl+Alt+Delete".action.quit = [ ];
-
-        # Powers off the monitors. To turn them back on, do any input like
-        # moving the mouse or pressing any other key.
-        "Mod+Shift+P".action.power-off-monitors = [ ];
       };
 
       # recent-windows.binds = {
