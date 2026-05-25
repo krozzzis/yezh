@@ -43,7 +43,7 @@ delib.module {
       workspaces."7" = {};
       workspaces."8" = {};
       workspaces."9" = {};
-      workspaces."0" = {};
+      workspaces."10" = {};
     };
   };
 }

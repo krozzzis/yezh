@@ -22,25 +22,14 @@ delib.module {
         "Mod+E" = {
           hotkey-overlay.title = "Open File Manager";
           action.spawn = [
-            "cosmic-files"
-          ];
-        };
-
-        "Mod+B" = {
-          hotkey-overlay.title = "Toggle Bar Visibility";
-          action.spawn = [
-            "noctalia-shell"
-            "ipc"
-            "call"
-            "bar"
-            "toggle"
+            "nautilus"
           ];
         };
 
         "Mod+Ctrl+L" = {
           hotkey-overlay.title = "Open Browser";
           action.spawn = [
-            "librewolf"
+            "zen-beta"
           ];
         };
 
@@ -50,7 +39,7 @@ delib.module {
           action.spawn = [
             "pamixer"
             "-i"
-            "2"
+            "5"
           ];
         };
         "XF86AudioLowerVolume" = {
@@ -58,7 +47,7 @@ delib.module {
           action.spawn = [
             "pamixer"
             "-d"
-            "2"
+            "5"
           ];
         };
         "XF86AudioMute" = {

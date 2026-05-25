@@ -43,6 +43,23 @@ delib.module {
       # settings = builtins.fromJSON (builtins.readJSON ./settings.json);
     };
 
+    programs.niri.settings = {
+      binds = {
+        "Mod+B" = {
+          hotkey-overlay.title = "Toggle Bar Visibility";
+          action.spawn = [
+            "dms"
+            "ipc"
+            "call"
+            "bar"
+            "toggle"
+            "index"
+            "0"
+          ];
+        };
+      };
+    };
+
     #systemd.user.services.niri-flake-polkit = { enable = false; };
   };
 }

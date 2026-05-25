@@ -36,6 +36,12 @@
   "modalAnimationSpeed": 1,
   "modalCustomAnimationDuration": 150,
   "enableRippleEffects": true,
+  "blurEnabled": false,
+  "blurForegroundLayers": true,
+  "blurLayerOutlineOpacity": 0.12,
+  "blurBorderColor": "outline",
+  "blurBorderCustomColor": "#ffffff",
+  "blurBorderOpacity": 0.35,
   "wallpaperFillMode": "Fill",
   "blurredWallpaperLayer": false,
   "blurWallpaperOnOverview": false,
@@ -52,6 +58,9 @@
   "selectedGpuIndex": 0,
   "enabledGpuPciIds": [],
   "showSystemTray": true,
+  "systemTrayIconTintMode": "none",
+  "systemTrayIconTintSaturation": 50,
+  "systemTrayIconTintStrength": 135,
   "showClock": true,
   "showNotificationButton": true,
   "showBattery": true,
@@ -192,12 +201,6 @@
   "greeterEnableFprint": false,
   "greeterEnableU2f": false,
   "greeterWallpaperPath": "",
-  "greeterUse24HourClock": true,
-  "greeterShowSeconds": false,
-  "greeterPadHours12Hour": false,
-  "greeterLockDateFormat": "",
-  "greeterFontFamily": "",
-  "greeterWallpaperFillMode": "",
   "mediaSize": 1,
   "appLauncherViewMode": "list",
   "spotlightModalViewMode": "list",
@@ -286,6 +289,10 @@
   "qtThemingEnabled": false,
   "syncModeWithPortal": true,
   "terminalsAlwaysDark": false,
+  "muxType": "tmux",
+  "muxUseCustomCommand": false,
+  "muxCustomCommand": "",
+  "muxSessionFilter": "",
   "runDmsMatugenTemplates": true,
   "matugenTemplateGtk": true,
   "matugenTemplateNiri": true,
@@ -363,7 +370,7 @@
   "notificationPopupPosition": 0,
   "notificationAnimationSpeed": 1,
   "notificationCustomAnimationDuration": 400,
-  "notificationHistoryEnabled": true,
+  "notificationHistoryEnabled": false,
   "notificationHistoryMaxCount": 50,
   "notificationHistoryMaxAgeDays": 7,
   "notificationHistorySaveLow": true,
@@ -399,7 +406,7 @@
   "customPowerActionHibernate": "",
   "customPowerActionReboot": "",
   "customPowerActionPowerOff": "",
-  "updaterHideWidget": false,
+  "updaterHideWidget": true,
   "updaterUseCustomCommand": false,
   "updaterCustomCommand": "",
   "updaterTerminalAdditionalParams": "",
@@ -419,7 +426,7 @@
       "autoHideDelay": 250,
       "borderColor": "surfaceText",
       "borderEnabled": false,
-      "borderOpacity": 1,
+      "borderOpacity": 0.39,
       "borderThickness": 1,
       "bottomGap": 0,
       "centerWidgets": [
@@ -428,6 +435,7 @@
           "id": "workspaceSwitcher"
         }
       ],
+      "clickThrough": false,
       "enabled": true,
       "fontScale": 1,
       "gothCornerRadiusOverride": false,
@@ -435,58 +443,60 @@
       "gothCornersEnabled": false,
       "id": "default",
       "innerPadding": 4,
-      "leftWidgets": ["launcherButton"],
+      "leftWidgets": [
+        "launcherButton",
+        {
+          "enabled": true,
+          "id": "systemTray"
+        }
+      ],
+      "maximizeDetection": true,
+      "maximizeWidgetIcons": false,
+      "maximizeWidgetText": false,
       "name": "Main Bar",
-      "noBackground": false,
+      "noBackground": true,
       "openOnOverview": true,
       "popupGapsAuto": true,
-      "popupGapsManual": 4,
+      "popupGapsManual": 13,
       "position": 3,
+      "removeWidgetPadding": false,
       "rightWidgets": [
         {
-          "id": "systemTray",
-          "enabled": true
-        },
-        {
-          "id": "keyboard_layout_name",
-          "enabled": true
-        },
-        {
-          "id": "notificationButton",
-          "enabled": true
-        },
-        {
-          "id": "battery",
-          "enabled": true
-        },
-        {
-          "id": "controlCenterButton",
-          "enabled": true
-        },
-        {
-          "id": "clock",
           "enabled": true,
-          "clockCompactMode": true
+          "id": "keyboard_layout_name"
+        },
+        {
+          "enabled": true,
+          "id": "notificationButton"
+        },
+        {
+          "enabled": true,
+          "id": "battery"
+        },
+        {
+          "enabled": true,
+          "id": "controlCenterButton"
+        },
+        {
+          "clockCompactMode": true,
+          "enabled": true,
+          "id": "clock"
         }
       ],
       "screenPreferences": ["all"],
+      "scrollXBehavior": "column",
+      "scrollYBehavior": "workspace",
+      "shadowIntensity": 0,
       "showOnLastDisplay": true,
       "spacing": 4,
       "squareCorners": false,
       "transparency": 1,
       "visible": true,
-      "widgetTransparency": 1,
-      "widgetPadding": 8,
-      "maximizeWidgetIcons": false,
-      "maximizeWidgetText": false,
-      "removeWidgetPadding": false,
-      "widgetOutlineEnabled": false,
       "widgetOutlineColor": "primary",
-      "shadowIntensity": 0,
-      "maximizeDetection": true,
-      "scrollYBehavior": "workspace",
-      "scrollXBehavior": "column",
-      "clickThrough": false
+      "widgetOutlineEnabled": false,
+      "widgetPadding": 8,
+      "widgetTransparency": 1,
+      "iconScale": 1
     }
   ],
   "desktopClockEnabled": false,

@@ -17,4 +17,8 @@ delib.module {
         homeDirectory = "/home/${username}";
       };
     };
+
+    nixos.always = {
+      home-manager.backupFileExtension = ".bak";
+    };
 }

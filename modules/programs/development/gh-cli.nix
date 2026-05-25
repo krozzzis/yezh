@@ -4,9 +4,13 @@ delib.module {
 
   options = delib.singleEnableOption true;
 
-  nixos.ifEnabled = {
-    environment.systemPackages = with pkgs; [
-      gh
-    ];
+  home.ifEnabled = {
+    programs.gh = {
+      enable = true;
+
+      gitCredentialHelper = {
+        enable = true;
+      };
+    };
   };
 }
