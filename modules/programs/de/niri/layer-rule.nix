@@ -1,4 +1,4 @@
-{ delib, ... }:
+{ delib, lib, ... }:
 delib.module {
   name = "programs.niri";
 
@@ -7,6 +7,13 @@ delib.module {
       {
         matches = [
           { namespace = "^noctalia-overview"; }
+        ];
+        place-within-backdrop = true;
+      }
+
+      {
+        matches = [
+          { namespace = "^quickshell$"; }
         ];
         place-within-backdrop = true;
       }

@@ -33,6 +33,14 @@ delib.host {
     powerManagement.enable = true;
     services.power-profiles-daemon.enable = true;
 
+    hardware.bluetooth = {
+      enable = true;
+      powerOnBoot = true; # автоматически включать Bluetooth при загрузке
+    };
+
+    # Включаем графический менеджер Blueman (очень удобен для трея)
+    services.blueman.enable = true;
+
     services.myPower.enable = false;
   };
 }

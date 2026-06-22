@@ -1,8 +1,16 @@
-{ delib, ... }:
+{ delib, lib, pkgs, config, ... }:
 delib.module {
   name = "programs.niri";
 
   home.ifEnabled = {
+    programs.niri = {
+      settings = {
+        includes = lib.mkAfter [
+          (./blur.kdl)
+        ];
+      };
+    };
+
     programs.niri.settings.window-rules = [
       {
         geometry-corner-radius = {
@@ -13,6 +21,7 @@ delib.module {
         };
         clip-to-geometry = true;
       }
+
       {
         matches = [
           { app-id = "librewolf"; }
@@ -21,6 +30,14 @@ delib.module {
         ];
         open-maximized = true;
       }
+
+      {
+        matches = [
+          { title = "Extension:"; }
+        ];
+        open-floating = true;
+      }
+
       {
         matches = [
           { app-id = "scrcpy"; }

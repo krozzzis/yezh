@@ -4,7 +4,11 @@ delib.module {
 
   options = delib.singleEnableOption false;
 
-  home.always.imports = [ inputs.dms.homeModules.dank-material-shell ];
+  home.always.imports = [
+    inputs.dms.homeModules.dank-material-shell
+    inputs.dms-plugin-registry.modules.default
+    inputs.dms.homeModules.niri
+  ];
   nixos.always.imports = [ inputs.dms.nixosModules.dank-material-shell ];
 
   nixos.ifEnabled = {
@@ -14,18 +18,22 @@ delib.module {
       configHome = "/home/krozzzis";
     };
 
+    services.upower.enable = true;
+
     environment.systemPackages = with pkgs; [
       libappindicator
+      upower
     ];
   };
 
   home.ifEnabled = { myconfig, ...}: {
     programs.dank-material-shell = {
       enable = true;
-      # niri = {
+      niri = {
       #   enableKeybinds = true;   # Sets static preset keybinds
+        includes.enable = true;    # Enable config includes hack. Enabled by default.
       #   enableSpawn = true;      # Auto-start DMS with niri, if enabled
-      # };
+      };
       systemd = {
         enable = true;             # Systemd service for auto-start
         restartIfChanged = true;   # Auto-restart dms.service when dank-material-shell changes
@@ -40,7 +48,12 @@ delib.module {
       # enableClipboardPaste = true;       # Pasting items from the clipboard (wtype)
 
       settings = lib.importJSON ./settings.json;
-      # settings = builtins.fromJSON (builtins.readJSON ./settings.json);
+
+      plugins = {
+        dankBatteryAlerts.enable = true;
+        volumeMixer.enable = true;
+        dankKDEConnect.enable = true;
+      };
     };
 
     programs.niri.settings = {

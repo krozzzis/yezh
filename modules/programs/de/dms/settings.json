@@ -115,12 +115,17 @@
     },
     {
       "enabled": true,
-      "id": "nightMode",
+      "id": "darkMode",
       "width": 50
     },
     {
       "enabled": true,
-      "id": "darkMode",
+      "id": "nightMode",
+      "width": 50
+    },
+    {
+      "id": "plugin_dankKDEConnect",
+      "enabled": true,
       "width": 50
     }
   ],
@@ -441,6 +446,7 @@
       "gothCornerRadiusOverride": false,
       "gothCornerRadiusValue": 12,
       "gothCornersEnabled": false,
+      "iconScale": 1,
       "id": "default",
       "innerPadding": 4,
       "leftWidgets": [
@@ -457,30 +463,31 @@
       "noBackground": true,
       "openOnOverview": true,
       "popupGapsAuto": true,
-      "popupGapsManual": 13,
+      "popupGapsManual": 5,
       "position": 3,
       "removeWidgetPadding": false,
       "rightWidgets": [
         {
+          "id": "keyboard_layout_name",
           "enabled": true,
-          "id": "keyboard_layout_name"
+          "keyboardLayoutNameCompactMode": false
         },
         {
-          "enabled": true,
-          "id": "notificationButton"
+          "id": "battery",
+          "enabled": true
         },
         {
-          "enabled": true,
-          "id": "battery"
+          "id": "volumeMixer",
+          "enabled": true
         },
         {
-          "enabled": true,
-          "id": "controlCenterButton"
+          "id": "controlCenterButton",
+          "enabled": true
         },
         {
-          "clockCompactMode": true,
+          "id": "clock",
           "enabled": true,
-          "id": "clock"
+          "clockCompactMode": true
         }
       ],
       "screenPreferences": ["all"],
@@ -495,8 +502,7 @@
       "widgetOutlineColor": "primary",
       "widgetOutlineEnabled": false,
       "widgetPadding": 8,
-      "widgetTransparency": 1,
-      "iconScale": 1
+      "widgetTransparency": 1
     }
   ],
   "desktopClockEnabled": false,
