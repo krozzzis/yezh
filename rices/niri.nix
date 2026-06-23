@@ -22,7 +22,6 @@ delib.rice {
     programs.ai.antigravity.enable = true;
     programs.libreoffice.enable = true;
     programs.prismlauncher.enable = true;
-    shell.uutils.enable = true;
   };
 
   nixos = {

@@ -15,6 +15,9 @@ delib.host {
       zed.enable = true;
       zen-browser.enable = true;
     };
+    shell.uutils.enable = true;
+    shell.sudo-rs.enable = true;
+
   };
 
   home.home.stateVersion = "26.05";

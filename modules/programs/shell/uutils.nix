@@ -8,6 +8,8 @@ delib.module {
   nixos.ifEnabled = {
     environment.systemPackages = with pkgs; [
       (lib.hiPrio uutils-coreutils-noprefix)
+      uutils-findutils
+      uutils-diffutils
     ];
 
     environment.shellInit = ''
