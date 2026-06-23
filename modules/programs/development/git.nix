@@ -11,7 +11,7 @@ delib.module {
 
       settings.user.name = myconfig.constants.username;
       settings.user.email = myconfig.constants.useremail;
-      extraConfig.core.editor = "vim";
+      settings.core.editor = "vim";
     };
   };
 

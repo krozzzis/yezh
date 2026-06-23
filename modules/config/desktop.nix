@@ -14,5 +14,10 @@ delib.module {
   myconfig.ifEnabled = { ... }: {
     gui.enable = true;
     shell.enable = true;
+
+    system.ntfs.enable = false;
+
+    programs.network.yggdrasil.enable = true;
+
   };
 }

@@ -1,4 +1,4 @@
-{ delib, lib, ... }:
+{ delib, lib, pkgs, ... }:
 
 delib.module {
   name = "gui";
@@ -49,5 +49,11 @@ delib.module {
       default = myconfig.gui.enable;
       description = "Enable miscellaneous apps (wezterm, nautilus, walker, throne, winapps, android, cosmic, prismlauncher, virt-manager)";
     };
+    gui.fonts.nerdfonts = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable Nerd Fonts for icons in terminal and GUI";
+    };
   };
+
 }

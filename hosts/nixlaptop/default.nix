@@ -8,17 +8,16 @@ delib.host {
   myconfig = {
     desktop.enable = true;
 
+    shell.name = "zsh";
+
     programs = {
       gui = {
         browser.librewolf.enable = false;
         media.reaper.enable = false;
       };
-      yggdrasil.enable = true;
-      shell.fish.enable = true;
     };
+
     system.libvirtd.enable = true;
-    system.sudo-rs.enable = true;
-    system.uutils.enable = true;
   };
 
   home.home.stateVersion = "26.05";

@@ -3,7 +3,7 @@
 delib.module {
   name = "system.sudo-rs";
 
-  options = delib.singleEnableOption false;
+  options = delib.singleEnableOption true;
 
   nixos.ifEnabled = {
     security.sudo-rs.enable = true;

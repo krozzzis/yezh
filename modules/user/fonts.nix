@@ -2,9 +2,14 @@
 delib.module {
   name = "user.fonts";
 
-  options = delib.singleEnableOption true;
+  options = { myconfig, ... }: {
+    user.fonts.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+    };
+  };
 
-  nixos.ifEnabled = {
+  nixos.ifEnabled = { myconfig, ... }: {
     fonts.packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
@@ -16,8 +21,10 @@ delib.module {
 
       inter
       jetbrains-mono
-
+    ] ++ lib.optionals myconfig.gui.fonts.nerdfonts [
+      nerd-fonts.fira-code
       nerd-fonts.jetbrains-mono
+      nerd-fonts.symbols-only
     ];
 
     fonts.fontconfig = {

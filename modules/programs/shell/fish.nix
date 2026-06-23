@@ -5,7 +5,7 @@ delib.module {
   options = { myconfig, ... }: {
     programs.shell.fish.enable = lib.mkOption {
       type = lib.types.bool;
-      default = myconfig.shell.enable;
+      default = myconfig.shell.name == "fish";
     };
   };
 
@@ -18,22 +18,21 @@ delib.module {
         set fish_greeting # Disable greeting
       '';
     };
-
-    # adds to $PATH
-    home.sessionPath = [
-      "$HOME/.cargo/bin"
-    ];
   };
 
-  nixos.ifEnabled = { myconfig, ...}:
+  nixos.ifEnabled = { myconfig, ... }:
   let
     inherit (myconfig.constants) username;
   in
   {
-    programs.fish = {
-      enable = true;
-    };
+    programs.fish.enable = true;
+  };
 
-    users.users.${username}.shell = pkgs.fish;
+  nixos.always = { myconfig, ... }:
+  let
+    inherit (myconfig.constants) username;
+  in
+  {
+    users.users.${username}.shell = lib.mkIf (myconfig.shell.name == "fish") pkgs.fish;
   };
 }

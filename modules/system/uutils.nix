@@ -3,7 +3,7 @@
 delib.module {
   name = "system.uutils";
 
-  options = delib.singleEnableOption false;
+  options = delib.singleEnableOption true;
 
   nixos.ifEnabled = {
     environment.systemPackages = with pkgs; [
