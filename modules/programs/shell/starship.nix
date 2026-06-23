@@ -205,13 +205,16 @@ delib.module {
           directory = {
             style = "bold blue";
             read_only = " 󰌾";
-            truncation_length = 1;
+            fish_style_pwd_dir_length = 1;
+            truncation_length = 2;
+            truncate_to_repo = false;
           };
 
           git_branch = {
             disabled = false;
-            format = " ($branch)";
+            format = "[\\($branch\\)]($style)";
           };
+
           package.disabled = false;
         }
         (optionalAttrs cfg.useNerdFonts nerdFontPreset);

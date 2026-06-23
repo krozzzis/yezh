@@ -20,9 +20,16 @@ delib.module {
       initContent = ''
         [[ -z $TMUX ]] || export TERM=screen-256color
 
+        setopt auto_cd
+
         zstyle ':completion:*' menu select
         zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
         zstyle ':completion:*' completer _complete _ignored
+
+        bindkey '^[[1;5C' forward-word
+        bindkey '^[[1;5D' backward-word
+        bindkey '^[OC' forward-word
+        bindkey '^[OD' backward-word
       '';
     };
 
