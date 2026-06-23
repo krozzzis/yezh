@@ -1,17 +1,17 @@
 { delib, lib, pkgs, ... }:
 delib.module {
-  name = "programs.shell.pciutils";
+  name = "programs.gui.media.obs";
 
   options = { myconfig, ... }: {
-    programs.shell.pciutils.enable = lib.mkOption {
+    programs.gui.media.obs.enable = lib.mkOption {
       type = lib.types.bool;
-      default = myconfig.shell.enable;
+      default = myconfig.gui.media.enable;
     };
   };
 
   nixos.ifEnabled = {
     environment.systemPackages = with pkgs; [
-      pciutils
+      obs-studio
     ];
   };
 }

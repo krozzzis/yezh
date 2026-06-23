@@ -1,8 +1,13 @@
-{ delib, pkgs, ... }:
+{ delib, lib, pkgs, ... }:
 delib.module {
-  name = "programs.fish";
+  name = "programs.shell.fish";
 
-  options = delib.singleEnableOption true;
+  options = { myconfig, ... }: {
+    programs.shell.fish.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = myconfig.shell.enable;
+    };
+  };
 
   home.ifEnabled = {
     programs.fish = {

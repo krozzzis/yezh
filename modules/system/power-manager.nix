@@ -1,4 +1,3 @@
-# /home/krozzzis/yezh/modules/system/power-manager.nix
 { config, pkgs, lib, ... }:
 
 with lib;
@@ -85,6 +84,6 @@ in
     };
 
     # Ensure user is in video group for brightnessctl
-    users.groups.video.members = [ "krozzzis" ];
+    users.groups.video.members = [ config.myconfig.constants.username ];
   };
 }

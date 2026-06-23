@@ -1,8 +1,13 @@
-{ delib, pkgs, ... }:
+{ delib, lib, pkgs, ... }:
 delib.module {
-  name = "programs.download";
+  name = "programs.shell.download";
 
-  options = delib.singleEnableOption true;
+  options = { myconfig, ... }: {
+    programs.shell.download.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = myconfig.shell.enable;
+    };
+  };
 
   nixos.ifEnabled = {
     environment.systemPackages = with pkgs; [

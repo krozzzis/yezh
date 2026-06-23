@@ -1,8 +1,13 @@
-{ delib, pkgs, ... }:
+{ delib, lib, pkgs, ... }:
 delib.module {
-  name = "programs.usbutils";
+  name = "programs.shell.usbutils";
 
-  options = delib.singleEnableOption true;
+  options = { myconfig, ... }: {
+    programs.shell.usbutils.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = myconfig.shell.enable;
+    };
+  };
 
   nixos.ifEnabled = {
     environment.systemPackages = with pkgs; [

@@ -1,8 +1,13 @@
-{ delib, pkgs, ... }:
+{ delib, lib, pkgs, ... }:
 delib.module {
-  name = "programs.vim";
+  name = "programs.shell.vim";
 
-  options = delib.singleEnableOption true;
+  options = { myconfig, ... }: {
+    programs.shell.vim.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = myconfig.shell.enable;
+    };
+  };
 
   nixos.ifEnabled = {
     environment.systemPackages = with pkgs; [

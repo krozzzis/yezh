@@ -1,9 +1,14 @@
-{ delib, ... }:
+{ delib, lib, ... }:
 delib.module {
   # ls replacement
-  name = "programs.eza";
+  name = "programs.shell.eza";
 
-  options = delib.singleEnableOption true;
+  options = { myconfig, ... }: {
+    programs.shell.eza.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = myconfig.shell.enable;
+    };
+  };
 
   home.ifEnabled = {
     programs.eza = {

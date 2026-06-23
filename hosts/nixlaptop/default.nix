@@ -6,18 +6,19 @@ delib.host {
   type = "nixlaptop";
 
   myconfig = {
-    programs = {
-      wezterm.enable = true;
-      telegram.enable = true;
-      librewolf.enable = false;
-      firefox.enable = true;
-      throne.enable = true;
-      zed.enable = true;
-      zen-browser.enable = true;
-    };
-    shell.uutils.enable = true;
-    shell.sudo-rs.enable = true;
+    desktop.enable = true;
 
+    programs = {
+      gui = {
+        browser.librewolf.enable = false;
+        media.reaper.enable = false;
+      };
+      yggdrasil.enable = true;
+      shell.fish.enable = true;
+    };
+    system.libvirtd.enable = true;
+    system.sudo-rs.enable = true;
+    system.uutils.enable = true;
   };
 
   home.home.stateVersion = "26.05";

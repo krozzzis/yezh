@@ -1,16 +1,16 @@
 { delib, lib, ... }:
 delib.module {
-  name = "programs.shell.yazi";
+  name = "programs.gui.browser.firefox";
 
   options = { myconfig, ... }: {
-    programs.shell.yazi.enable = lib.mkOption {
+    programs.gui.browser.firefox.enable = lib.mkOption {
       type = lib.types.bool;
-      default = myconfig.shell.enable;
+      default = myconfig.gui.browser.enable;
     };
   };
 
   home.ifEnabled = {
-    programs.yazi = {
+    programs.firefox = {
       enable = true;
     };
   };
