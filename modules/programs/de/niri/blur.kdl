@@ -1,6 +1,0 @@
-window-rule {
-    match app-id="^WezTerm$"
-    background-effect {
-        blur true
-    }
-}

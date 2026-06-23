@@ -3,14 +3,6 @@ delib.module {
   name = "programs.niri";
 
   home.ifEnabled = {
-    programs.niri = {
-      settings = {
-        includes = lib.mkAfter [
-          (./blur.kdl)
-        ];
-      };
-    };
-
     programs.niri.settings.window-rules = [
       {
         geometry-corner-radius = {

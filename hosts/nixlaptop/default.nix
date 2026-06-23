@@ -9,7 +9,7 @@ delib.host {
     programs = {
       wezterm.enable = true;
       telegram.enable = true;
-      librewolf.enable = true;
+      librewolf.enable = false;
       firefox.enable = true;
       throne.enable = true;
       zed.enable = true;

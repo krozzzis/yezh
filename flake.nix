@@ -62,6 +62,11 @@
       inputs.elephant.follows = "elephant";
     };
 
+    ntfsplus = {
+      url = "github:cmspam/ntfsplus-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";

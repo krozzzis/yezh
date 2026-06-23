@@ -4,7 +4,7 @@ delib.rice {
 
   myconfig = {
     programs.niri.enable = true;
-    programs.noctalia.enable = true;
+    programs.dms.enable = true;
     programs.walker.enable = true;
     programs.audacity.enable = true;
     programs.reaper.enable = false;
@@ -14,7 +14,7 @@ delib.rice {
     programs.android.enable = true;
     programs.kdeconnect.enable = true;
     programs.yggdrasil.enable = true;
-    programs.cosmic.enable = true;
+    programs.nautilus.enable = true;
     programs.vlc.enable = true;
     programs.obs.enable = true;
     programs.qbittorrent.enable = true;
@@ -22,7 +22,6 @@ delib.rice {
     programs.ai.antigravity.enable = true;
     programs.libreoffice.enable = true;
     programs.prismlauncher.enable = true;
-    system.sddm.enable = true;
     shell.uutils.enable = true;
   };
 
