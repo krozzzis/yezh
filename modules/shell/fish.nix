@@ -23,6 +23,11 @@ delib.module {
         set fish_greeting # Disable greeting
       '';
     };
+
+    programs.fzf = {
+      enable = true;
+      enableFishIntegration = true;
+    };
   };
 
   nixos.ifEnabled = { myconfig, ... }: let
