@@ -3,19 +3,20 @@ delib.host {
   name = "nixlaptop";
 
   rice = "niri";
-  type = "nixlaptop";
 
-  myconfig = {
+  myconfig = { myconfig, ... }: {
     desktop.enable = true;
 
-    shell.name = "zsh";
+    shell.default = myconfig.shell.fish;
+    editor.default = myconfig.editor.vim;
+    browser.default = myconfig.browser.zenBrowser;
+    fileManager.default = myconfig.fileManager.nautilus;
+    musicPlayer.default = myconfig.media.vlc;
+    videoPlayer.default = myconfig.media.vlc;
 
-    programs = {
-      gui = {
-        browser.librewolf.enable = false;
-        media.reaper.enable = false;
-      };
-    };
+    browser.librewolf.enable = false;
+    media.reaper.enable = false;
+    terminal.wezterm.enable = true;
 
     system.libvirtd.enable = true;
   };
@@ -38,12 +39,9 @@ delib.host {
 
     hardware.bluetooth = {
       enable = true;
-      powerOnBoot = true; # автоматически включать Bluetooth при загрузке
+      powerOnBoot = true;
     };
 
-    # Включаем графический менеджер Blueman (очень удобен для трея)
     services.blueman.enable = true;
-
-    services.myPower.enable = false;
   };
 }

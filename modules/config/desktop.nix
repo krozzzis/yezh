@@ -16,8 +16,5 @@ delib.module {
     shell.enable = true;
 
     system.ntfs.enable = false;
-
-    programs.network.yggdrasil.enable = true;
-
   };
 }

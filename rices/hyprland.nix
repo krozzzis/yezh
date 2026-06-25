@@ -3,8 +3,8 @@ delib.rice {
   name = "hyprland";
 
   myconfig = {
-    programs.hyprland.enable = true;
-    system.polkit-lxqt-agent.enable = true;
+    de.hyprland.enable = true;
+    apps.polkitLxqtAgent.enable = true;
     system.sddm.enable = true;
   };
 

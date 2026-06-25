@@ -9,18 +9,21 @@ delib.module {
       default = false;
       description = "Enable shell utilities (fish, eza, yazi, vim, etc.)";
     };
-    shell.name = lib.mkOption {
-      type = lib.types.enum [ "zsh" "fish" ];
-      default = "zsh";
-      description = "Which shell to use as the user's login shell";
+    shell.default = lib.mkOption {
+      type = lib.types.nullOr (lib.types.attrs);
+      default = null;
+      description = "Default shell module (set to myconfig.shell.zsh or myconfig.shell.fish in host)";
     };
-  };
-
-  myconfig.ifEnabled = { ... }: {
-    programs.shell.starship.enable = true;
   };
 
   home.ifEnabled = {
     home.sessionPath = [ "$HOME/.cargo/bin" ];
+  };
+
+  nixos.always = { myconfig, ... }: let
+    inherit (myconfig.constants) username;
+  in {
+    users.users.${username}.shell = lib.mkIf (myconfig.shell.default != null)
+      myconfig.shell.default.pkg;
   };
 }

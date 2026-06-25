@@ -3,9 +3,9 @@ delib.rice {
   name = "niri";
 
   myconfig = {
-    programs.gui.de.niri.enable = true;
-    programs.gui.de.dms.enable = true;
-    programs.gui.apps.walker.enable = true;
+    de.niri.enable = true;
+    de.dms.enable = true;
+    apps.walker.enable = true;
   };
 
   nixos = {

@@ -1,0 +1,28 @@
+{ delib, lib, pkgs, ... }:
+delib.module {
+  name = "shell.git";
+
+  options = { myconfig, ... }: {
+    shell.git.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = myconfig.shell.enable;
+    };
+  };
+
+  home.ifEnabled = { myconfig, ... }: {
+    programs.git = {
+      enable = true;
+      lfs.enable = true;
+
+      settings.user.name = myconfig.constants.username;
+      settings.user.email = myconfig.constants.useremail;
+      settings.core.editor = lib.getName myconfig.editor.default.pkg;
+    };
+  };
+
+  nixos.ifEnabled = {
+    environment.systemPackages = with pkgs; [
+      git
+    ];
+  };
+}

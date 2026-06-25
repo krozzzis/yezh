@@ -1,0 +1,47 @@
+{ delib, lib, pkgs, inputs, ... }:
+delib.module {
+  name = "browser.zenBrowser";
+
+  options = { myconfig, ... }: {
+    browser.zenBrowser.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = myconfig.gui.enable;
+    };
+    browser.zenBrowser.pkg = lib.mkOption {
+      type = lib.types.package;
+      default = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    };
+  };
+
+  home.always.imports = [ inputs.zen-browser.homeModules.default ];
+
+  nixos.ifEnabled = {
+    environment.sessionVariables = {
+      MOZ_USE_XINPUT2 = "1";
+    };
+  };
+
+  home.ifEnabled = {
+    programs.zen-browser = {
+      enable = true;
+
+      policies = let
+          mkLockedAttrs = builtins.mapAttrs (_: value: {
+            Value = value;
+            Status = "locked";
+          });
+        in {
+
+          Preferences = mkLockedAttrs {
+            "widget.use-xdg-desktop-portal.file-picker" = 1;
+          };
+        };
+    };
+
+    # programs.zen-browser.profiles.default.extensions = {
+    #   packages = with inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
+    #     ublock-origin
+    #   ];
+    # };
+  };
+}

@@ -1,4 +1,4 @@
-{ delib, pkgs, ... }:
+{ delib, lib, pkgs, ... }:
 
 delib.module {
   name = "system.uutils";
