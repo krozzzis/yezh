@@ -31,20 +31,34 @@ delib.module {
     };
   };
 
-  nixos.always = { myconfig, ... }: {
-    environment.variables = {
-      EDITOR = lib.getName myconfig.editor.default.pkg;
-      BROWSER = lib.getName myconfig.browser.default.pkg;
-      TERMINAL = lib.getName myconfig.terminal.default.pkg;
+  nixos.always = { myconfig, ... }:
+    let
+      bin = pkg: pkg.meta.mainProgram or (lib.getName pkg);
+    in
+    {
+      environment.variables = {
+        EDITOR = bin myconfig.editor.default.pkg;
+        BROWSER = bin myconfig.browser.default.pkg;
+        TERMINAL = bin myconfig.terminal.default.pkg;
+      };
+
+      xdg.mime.defaultApplications = {
+        "inode/directory" = "${bin (myconfig.fileManager.default.pkg or pkgs.nautilus)}.desktop";
+        "text/plain" = "${bin myconfig.editor.default.pkg}.desktop";
+        "x-scheme-handler/http" = "${bin myconfig.browser.default.pkg}.desktop";
+        "x-scheme-handler/https" = "${bin myconfig.browser.default.pkg}.desktop";
+        "video/*" = "${bin myconfig.videoPlayer.default.pkg}.desktop";
+        "audio/*" = "${bin myconfig.musicPlayer.default.pkg}.desktop";
+      };
     };
 
-    xdg.mime.defaultApplications = {
-      "inode/directory" = "${lib.getName myconfig.fileManager.default.pkg or pkgs.nautilus}.desktop";
-      "text/plain" = "${lib.getName myconfig.editor.default.pkg}.desktop";
-      "x-scheme-handler/http" = "${lib.getName myconfig.browser.default.pkg}.desktop";
-      "x-scheme-handler/https" = "${lib.getName myconfig.browser.default.pkg}.desktop";
-      "video/*" = "${lib.getName myconfig.videoPlayer.default.pkg}.desktop";
-      "audio/*" = "${lib.getName myconfig.musicPlayer.default.pkg}.desktop";
+  home.always = { myconfig, ... }:
+    let
+      bin = pkg: pkg.meta.mainProgram or (lib.getName pkg);
+    in
+    {
+      home.sessionVariables = {
+        EDITOR = bin myconfig.editor.default.pkg;
+      };
     };
-  };
 }

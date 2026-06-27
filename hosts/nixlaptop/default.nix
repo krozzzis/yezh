@@ -8,12 +8,13 @@ delib.host {
     desktop.enable = true;
 
     shell.default = myconfig.shell.fish;
-    editor.default = myconfig.editor.vim;
+    editor.default = myconfig.editor.nixvim;
     browser.default = myconfig.browser.zenBrowser;
     fileManager.default = myconfig.fileManager.nautilus;
     musicPlayer.default = myconfig.media.vlc;
     videoPlayer.default = myconfig.media.vlc;
 
+    editor.nixvim.enable = true;
     browser.librewolf.enable = false;
     media.reaper.enable = false;
     terminal.wezterm.enable = true;

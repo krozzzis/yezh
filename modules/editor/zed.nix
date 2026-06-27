@@ -1,9 +1,9 @@
 { delib, lib, pkgs, ... }:
 delib.module {
-  name = "dev.zed";
+  name = "editor.zed";
 
   options = { myconfig, ... }: {
-    dev.zed.enable = lib.mkOption {
+    editor.zed.enable = lib.mkOption {
       type = lib.types.bool;
       default = myconfig.gui.enable;
     };

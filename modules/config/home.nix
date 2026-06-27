@@ -18,7 +18,7 @@ delib.module {
       };
     };
 
-    nixos.always = {
-      home-manager.backupFileExtension = ".bak";
-    };
+  nixos.always = {
+    home-manager.backupFileExtension = ".bak";
+  };
 }
