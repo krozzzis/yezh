@@ -1,4 +1,9 @@
-{ delib, lib, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "shell.yazi";
 
@@ -10,12 +15,25 @@ delib.module {
   };
 
   home.ifEnabled = { myconfig, ... }: {
+    home.packages = with pkgs; [
+      exiftool
+      mediainfo
+      poppler
+      chafa
+      ffmpeg
+      ripgrep
+    ];
+
     programs.yazi = {
       enable = true;
       settings = {
         opener = {
           edit = [
-            { run = "${lib.getName myconfig.editor.default.pkg} \"$@\""; block = true; desc = "Editor"; }
+            {
+              run = "${lib.getName myconfig.editor.default.pkg} \"$@\"";
+              block = true;
+              desc = "Editor";
+            }
           ];
         };
       };
