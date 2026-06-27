@@ -18,6 +18,8 @@ delib.host {
     media.reaper.enable = false;
     terminal.wezterm.enable = true;
 
+    shell.fzf.enable = true;
+
     system.libvirtd.enable = true;
   };
 

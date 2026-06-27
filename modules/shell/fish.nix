@@ -14,7 +14,7 @@ delib.module {
     };
   };
 
-  home.ifEnabled = {
+  home.ifEnabled = { myconfig, ... }: {
     programs.fish = {
       enable = true;
       generateCompletions = true;
@@ -24,10 +24,7 @@ delib.module {
       '';
     };
 
-    programs.fzf = {
-      enable = true;
-      enableFishIntegration = true;
-    };
+    programs.fzf.enableFishIntegration = myconfig.shell.fzf.enable;
   };
 
   nixos.ifEnabled = { myconfig, ... }: let

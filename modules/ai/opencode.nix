@@ -13,43 +13,30 @@ delib.module {
     home.packages = with pkgs; [
       opencode
       mcp-nixos
+      playwright-mcp
     ];
 
-    # programs.opencode = {
-    #   enable = true;
-    #   enableMcpIntegration = true;  # подтянет из programs.mcp.servers
-    # };
-
-    # или вручную в settings
-    # programs.opencode.settings = {
-    #   mcp.nixos = {
-    #     type = "local";
-    #     command = "mcp-nixos";
-    #     enabled = true;
-    #   };
-    # };
-
-    # xdg.configFile."opencode/opencode.json".text = lib.generators.toJSON {
-    #   # "$schema" = "https://opencode.ai/config.json";
-    #   mcp = {
-    #     gh_grep = {
-    #       type = "remote";
-    #       url = "https://mcp.grep.app";
-    #     };
-    #     context7 = {
-    #       type = "remote";
-    #       url = "https://mcp.context7.com/mcp";
-    #     };
-    #     exa = {
-    #       type = "remote";
-    #       url = "https://mcp.exa.ai/mcp";
-    #     };
-    #   };
-    #   # permission = {
-    #   #   websearch = "allow";
-    #   #   grep = "allow";
-    #   #   glob = "allow";
-    #   # };
-    # };
+    xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
+      mcp = {
+        nixos = {
+          type = "local";
+          command = ["mcp-nixos"];
+        };
+        websearch = {
+          type = "remote";
+          url = "https://mcp.exa.ai/mcp";
+        };
+        playwright = {
+          type = "local";
+          command = ["playwright-mcp"];
+        };
+      };
+      permission = {
+        websearch = "allow";
+        webfetch = "allow";
+        grep = "allow";
+        glob = "allow";
+      };
+    };
   };
 }

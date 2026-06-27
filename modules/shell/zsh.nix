@@ -14,7 +14,7 @@ delib.module {
     };
   };
 
-  home.ifEnabled = {
+  home.ifEnabled = { myconfig, ... }: {
     programs.zsh = {
       enable = true;
       enableCompletion = true;
@@ -38,10 +38,7 @@ delib.module {
       '';
     };
 
-    programs.fzf = {
-      enable = true;
-      enableZshIntegration = true;
-    };
+    programs.fzf.enableZshIntegration = myconfig.shell.fzf.enable;
   };
 
   nixos.ifEnabled = { myconfig, ... }: let
