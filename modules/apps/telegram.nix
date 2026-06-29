@@ -1,9 +1,9 @@
 { delib, lib, pkgs, ... }:
 delib.module {
-  name = "comms.telegram";
+  name = "apps.telegram";
 
   options = { myconfig, ... }: {
-    comms.telegram.enable = lib.mkOption {
+    apps.telegram.enable = lib.mkOption {
       type = lib.types.bool;
       default = myconfig.gui.enable;
     };

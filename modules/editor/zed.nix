@@ -9,83 +9,86 @@ delib.module {
     };
   };
 
-  home.ifEnabled = {
-    home.packages = with pkgs; [
-      nixd
-      rust-analyzer
-      basedpyright
-      ruff
-      taplo
-      nixfmt
-    ];
+  home.ifEnabled = { myconfig, ... }:
+    let
+      enabledServers = lib.filterAttrs (_name: srv: srv.enable) myconfig.dev.lsp;
 
-    programs.zed-editor = {
-      enable = true;
+      zedLspConfigs = {
+        "rust-analyzer" = {
+          check_on_save = true;
+          check.command = "clippy";
+        };
+        ruff = {
+          format = "on";
+          lint = "on";
+        };
+      };
 
-      extensions = [
-        "nix"
-        "rust"
-        "python"
-        "toml"
-      ];
-
-      extraPackages = with pkgs; [
-        rust-analyzer
-        basedpyright
-        ruff
-        nixd
+      lsp = builtins.listToAttrs (map (name: {
+        inherit name;
+        value = zedLspConfigs.${name} or { };
+      }) (builtins.attrNames enabledServers));
+    in
+    {
+      home.packages = with pkgs; [
         nixfmt
-        taplo
       ];
 
-      userSettings = {
-        telemetry = {
-          diagnostics = false;
-          metrics = false;
-        };
+      programs.zed-editor = {
+        enable = true;
 
-        title_bar = {
-          show_sign_in = false;
-          show_branch_icon = false;
-        };
+        extensions = [
+          "nix"
+          "rust"
+          "python"
+          "toml"
+        ];
 
-        lsp = {
-          rust-analyzer = {
-            check_on_save = true;
-            check.command = "clippy";
-          };
-          basedpyright = { };
-          ruff = {
-            format = "on";
-            lint = "on";
-          };
-          nixd = { };
-          taplo = { };
-        };
+        extraPackages = with pkgs; [
+          rust-analyzer
+          basedpyright
+          ruff
+          nixd
+          nixfmt
+          taplo
+        ];
 
-        languages = {
-          Rust = {
-            language_servers = [ "rust-analyzer" ];
-            formatter.external.command = "rustfmt";
+        userSettings = {
+          telemetry = {
+            diagnostics = false;
+            metrics = false;
           };
-          Python = {
-            language_servers = [ "basedpyright" "ruff" ];
-            formatter.external = {
-              command = "ruff";
-              arguments = [ "format" ];
+
+          title_bar = {
+            show_sign_in = false;
+            show_branch_icon = false;
+          };
+
+          inherit lsp;
+
+          languages = {
+            Rust = {
+              language_servers = [ "rust-analyzer" ];
+              formatter.external.command = "rustfmt";
             };
-          };
-          Nix = {
-            language_servers = [ "nixd" ];
-            formatter.external = {
-              command = "nixfmt";
+            Python = {
+              language_servers = [ "basedpyright" "ruff" ];
+              formatter.external = {
+                command = "ruff";
+                arguments = [ "format" ];
+              };
             };
-          };
-          TOML = {
-            language_servers = [ "taplo" ];
+            Nix = {
+              language_servers = [ "nixd" ];
+              formatter.external = {
+                command = "nixfmt";
+              };
+            };
+            TOML = {
+              language_servers = [ "taplo" ];
+            };
           };
         };
       };
     };
-  };
 }

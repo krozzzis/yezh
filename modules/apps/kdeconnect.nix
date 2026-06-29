@@ -1,9 +1,9 @@
 { delib, lib, pkgs, ... }:
 delib.module {
-  name = "comms.kdeconnect";
+  name = "apps.kdeconnect";
 
   options = { myconfig, ... }: {
-    comms.kdeconnect.enable = lib.mkOption {
+    apps.kdeconnect.enable = lib.mkOption {
       type = lib.types.bool;
       default = myconfig.gui.enable;
     };

@@ -5,6 +5,7 @@ delib.host {
   rice = "niri";
 
   myconfig = { myconfig, ... }: {
+    dev.enable = true;
     desktop.enable = true;
 
     shell.default = myconfig.shell.fish;
@@ -18,6 +19,7 @@ delib.host {
     browser.librewolf.enable = false;
     media.reaper.enable = false;
     terminal.wezterm.enable = true;
+    apps.wireshark.enable = true;
 
     shell.fzf.enable = true;
 

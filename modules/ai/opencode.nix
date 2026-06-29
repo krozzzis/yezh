@@ -1,4 +1,4 @@
-{ delib, pkgs, lib, ... }:
+{ delib, lib, pkgs, ... }:
 delib.module {
   name = "ai.opencode";
 
@@ -9,34 +9,36 @@ delib.module {
     };
   };
 
-  home.ifEnabled = {
-    home.packages = with pkgs; [
-      opencode
-      mcp-nixos
-      playwright-mcp
-    ];
+  home.ifEnabled = { myconfig, ... }:
+    let
+      enabledServers = lib.filterAttrs (_name: srv: srv.enable) myconfig.dev.mcp;
 
-    xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
-      mcp = {
-        nixos = {
-          type = "local";
-          command = ["mcp-nixos"];
-        };
-        websearch = {
-          type = "remote";
-          url = "https://mcp.exa.ai/mcp";
-        };
-        playwright = {
-          type = "local";
-          command = ["playwright-mcp"];
-        };
+      mkMcpServer = name: server: {
+        type = server.type;
+      } // lib.optionalAttrs (server.command != null) {
+        command = server.command;
+      } // lib.optionalAttrs (server.url != null) {
+        url = server.url;
       };
-      permission = {
-        websearch = "allow";
-        webfetch = "allow";
-        grep = "allow";
-        glob = "allow";
+
+      mcpServers = builtins.listToAttrs (map (name: {
+        inherit name;
+        value = mkMcpServer name myconfig.dev.mcp.${name};
+      }) (builtins.attrNames enabledServers));
+    in
+    {
+      home.packages = with pkgs; [
+        opencode
+      ];
+
+      xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
+        mcp = mcpServers;
+        permission = {
+          websearch = "allow";
+          webfetch = "allow";
+          grep = "allow";
+          glob = "allow";
+        };
       };
     };
-  };
 }
