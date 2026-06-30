@@ -23,6 +23,7 @@ delib.host {
     terminal.wezterm.enable = true;
     apps.wireshark.enable = true;
     apps.swayimg.enable = true;
+    apps.qpwgraph.enable = true;
     apps.cosmic.enable = true;
 
     shell.fzf.enable = true;
