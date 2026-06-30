@@ -49,5 +49,7 @@ delib.host {
     };
 
     services.blueman.enable = true;
+
+    boot.tmp.useTmpfs = true;
   };
 }
