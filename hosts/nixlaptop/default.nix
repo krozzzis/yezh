@@ -12,6 +12,8 @@ delib.host {
     editor.default = myconfig.editor.nixvim;
     browser.default = myconfig.browser.zenBrowser;
     fileManager.default = myconfig.fileManager.nautilus;
+    imageViewer.default = myconfig.apps.swayimg;
+    pdfViewer.default = myconfig.apps.cosmic.reader;
     musicPlayer.default = myconfig.media.vlc;
     videoPlayer.default = myconfig.media.vlc;
 
@@ -20,6 +22,8 @@ delib.host {
     media.reaper.enable = true;
     terminal.wezterm.enable = true;
     apps.wireshark.enable = true;
+    apps.swayimg.enable = true;
+    apps.cosmic.enable = true;
 
     shell.fzf.enable = true;
 

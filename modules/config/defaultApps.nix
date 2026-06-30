@@ -29,6 +29,14 @@ delib.module {
       type = lib.types.attrs;
       default = { pkg = myconfig.media.vlc.pkg; };
     };
+    imageViewer.default = lib.mkOption {
+      type = lib.types.attrs;
+      default = { pkg = myconfig.apps.swayimg.pkg; };
+    };
+    pdfViewer.default = lib.mkOption {
+      type = lib.types.attrs;
+      default = { pkg = myconfig.apps.cosmic.reader.pkg; };
+    };
   };
 
   nixos.always = { myconfig, ... }:
@@ -49,6 +57,8 @@ delib.module {
         "x-scheme-handler/https" = "${bin myconfig.browser.default.pkg}.desktop";
         "video/*" = "${bin myconfig.videoPlayer.default.pkg}.desktop";
         "audio/*" = "${bin myconfig.musicPlayer.default.pkg}.desktop";
+        "image/*" = "${bin myconfig.imageViewer.default.pkg}.desktop";
+        "application/pdf" = "${bin myconfig.pdfViewer.default.pkg}.desktop";
       };
     };
 

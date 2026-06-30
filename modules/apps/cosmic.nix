@@ -13,10 +13,16 @@ delib.module {
         default = true;
         description = "Cosmic file manager";
       };
-      reader = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Cosmic document reader";
+      reader = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Cosmic document reader";
+        };
+        pkg = lib.mkOption {
+          type = lib.types.package;
+          default = pkgs.cosmic-reader;
+        };
       };
       calculator = lib.mkOption {
         type = lib.types.bool;
@@ -39,7 +45,7 @@ delib.module {
   home.ifEnabled = { cfg, ... }: let
     packages = with pkgs; (
       (lib.optionals cfg.files [ cosmic-files ])
-      ++ (lib.optionals cfg.reader [ cosmic-reader ])
+      ++ (lib.optionals cfg.reader.enable [ cfg.reader.pkg ])
       ++ (lib.optionals cfg.calculator [ cosmic-ext-calculator ])
       ++ (lib.optionals cfg.player [ cosmic-player ])
       ++ (lib.optionals cfg.workspaces [ cosmic-workspaces-epoch ])
