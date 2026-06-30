@@ -28,6 +28,11 @@ delib.module {
 
     programs.elephant.enable = true;
 
+    home.activation.restartElephant = ''
+      systemctl --user try-restart elephant.service 2>/dev/null || true
+      ${pkgs.elephant}/bin/elephant index 2>/dev/null || true
+    '';
+
     # systemd.user.services.elephant = {
     #   Unit = {
     #     Description = "Elephant";
