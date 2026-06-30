@@ -17,13 +17,14 @@ delib.host {
 
     editor.nixvim.enable = true;
     browser.librewolf.enable = false;
-    media.reaper.enable = false;
+    media.reaper.enable = true;
     terminal.wezterm.enable = true;
     apps.wireshark.enable = true;
 
     shell.fzf.enable = true;
 
     system.libvirtd.enable = true;
+    system.audio.enable = true;
   };
 
   home.home.stateVersion = "26.05";

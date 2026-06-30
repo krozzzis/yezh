@@ -5,8 +5,6 @@ delib.module {
   options = delib.singleEnableOption false;
 
   nixos.ifEnabled = {
-    nixpkgs.config.pulseaudio = true;
-
     services.xserver = {
       enable = true;
       desktopManager = {
