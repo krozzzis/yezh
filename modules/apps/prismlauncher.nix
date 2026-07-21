@@ -3,10 +3,7 @@ delib.module {
   name = "apps.prismlauncher";
 
   options = { myconfig, ... }: {
-    apps.prismlauncher.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    apps.prismlauncher.enable = delib.boolOption myconfig.gui.enable;
   };
 
   home.ifEnabled = {

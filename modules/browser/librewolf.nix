@@ -3,14 +3,8 @@ delib.module {
   name = "browser.librewolf";
 
   options = { myconfig, ... }: {
-    browser.librewolf.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
-    browser.librewolf.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.librewolf;
-    };
+    browser.librewolf.enable = delib.boolOption myconfig.gui.enable;
+    browser.librewolf.pkg = delib.packageOption pkgs.librewolf;
   };
 
   home.ifEnabled = {

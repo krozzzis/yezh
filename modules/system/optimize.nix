@@ -3,10 +3,7 @@ delib.module {
   name = "system.optimize";
 
   options = { myconfig, ... }: {
-    system.optimize.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-    };
+    system.optimize.enable = delib.boolOption true;
   };
 
   nixos.ifEnabled = { myconfig, cfg, ... }: {

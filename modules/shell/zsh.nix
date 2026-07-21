@@ -3,15 +3,9 @@ delib.module {
   name = "shell.zsh";
 
   options = { myconfig, ... }: {
-    shell.zsh.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable && myconfig.shell.default != null
-        && lib.getName myconfig.shell.zsh.pkg == lib.getName myconfig.shell.default.pkg;
-    };
-    shell.zsh.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.zsh;
-    };
+    shell.zsh.enable = delib.boolOption (myconfig.shell.enable && myconfig.shell.default != null
+        && lib.getName myconfig.shell.zsh.pkg == lib.getName myconfig.shell.default.pkg);
+    shell.zsh.pkg = delib.packageOption pkgs.zsh;
   };
 
   home.ifEnabled = { myconfig, ... }: {

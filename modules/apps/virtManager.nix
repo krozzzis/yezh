@@ -3,10 +3,7 @@ delib.module {
   name = "apps.virtManager";
 
   options = { myconfig, ... }: {
-    apps.virtManager.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    apps.virtManager.enable = delib.boolOption myconfig.gui.enable;
   };
 
   nixos.ifEnabled = { myconfig, ... }: {

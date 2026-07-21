@@ -3,10 +3,7 @@ delib.module {
   name = "shell.download";
 
   options = { myconfig, ... }: {
-    shell.download.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable;
-    };
+    shell.download.enable = delib.boolOption myconfig.shell.enable;
   };
 
   nixos.ifEnabled = {

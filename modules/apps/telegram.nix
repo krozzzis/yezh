@@ -3,10 +3,7 @@ delib.module {
   name = "apps.telegram";
 
   options = { myconfig, ... }: {
-    apps.telegram.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    apps.telegram.enable = delib.boolOption myconfig.gui.enable;
   };
 
   nixos.ifEnabled = {

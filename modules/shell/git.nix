@@ -3,10 +3,7 @@ delib.module {
   name = "shell.git";
 
   options = { myconfig, ... }: {
-    shell.git.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable;
-    };
+    shell.git.enable = delib.boolOption myconfig.shell.enable;
   };
 
   home.ifEnabled = { myconfig, ... }: {

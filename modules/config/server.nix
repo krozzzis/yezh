@@ -4,11 +4,7 @@ delib.module {
   name = "server";
 
   options = {
-    server.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable server mode";
-    };
+    server.enable = delib.description (delib.boolOption false) "Enable server mode";
   };
 
   myconfig.ifEnabled = { ... }: {

@@ -3,11 +3,7 @@
 let
   lspServerSubmodule = lib.types.submodule {
     options = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable this LSP server";
-      };
+      enable = delib.description (delib.boolOption true) "Enable this LSP server";
       package = lib.mkOption {
         type = lib.types.nullOr lib.types.package;
         default = null;
@@ -23,11 +19,7 @@ let
 
   mcpServerSubmodule = lib.types.submodule {
     options = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable this MCP server";
-      };
+      enable = delib.description (delib.boolOption true) "Enable this MCP server";
       type = lib.mkOption {
         type = lib.types.enum [ "local" "remote" ];
         description = "MCP server type";
@@ -49,11 +41,7 @@ delib.module {
   name = "dev";
 
   options = { myconfig, ... }: {
-    dev.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable development tools (LSP, MCP, etc.)";
-    };
+    dev.enable = delib.description (delib.boolOption true) "Enable development tools (LSP, MCP, etc.)";
 
     dev.lsp = lib.mkOption {
       type = lib.types.attrsOf lspServerSubmodule;

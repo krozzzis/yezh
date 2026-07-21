@@ -7,4 +7,8 @@ delib.module {
   nixos.ifEnabled = {
     services.xserver.xkb.options = "grp:caps_toggle";
   };
+
+  home.ifEnabled = {
+    programs.niri.settings.input.keyboard.xkb.options = "grp:caps_toggle";
+  };
 }

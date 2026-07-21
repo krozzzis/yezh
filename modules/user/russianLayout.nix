@@ -7,4 +7,8 @@ delib.module {
   nixos.ifEnabled = {
     services.xserver.xkb.layout = "us,ru";
   };
+
+  home.ifEnabled = {
+    programs.niri.settings.input.keyboard.xkb.layout = "us,ru";
+  };
 }

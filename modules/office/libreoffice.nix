@@ -3,10 +3,7 @@ delib.module {
   name = "office.libreoffice";
 
   options = { myconfig, ... }: {
-    office.libreoffice.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    office.libreoffice.enable = delib.boolOption myconfig.gui.enable;
   };
 
   home.ifEnabled = {

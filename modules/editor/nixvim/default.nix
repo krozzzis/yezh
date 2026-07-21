@@ -3,15 +3,9 @@ delib.module {
   name = "editor.nixvim";
 
   options = { myconfig, ... }: {
-    editor.nixvim.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
+    editor.nixvim.enable = delib.boolOption false;
 
-    editor.nixvim.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.neovim;
-    };
+    editor.nixvim.pkg = delib.packageOption pkgs.neovim;
   };
 
   home.always.imports = [

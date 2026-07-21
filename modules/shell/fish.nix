@@ -3,15 +3,9 @@ delib.module {
   name = "shell.fish";
 
   options = { myconfig, ... }: {
-    shell.fish.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable && myconfig.shell.default != null
-        && lib.getName myconfig.shell.fish.pkg == lib.getName myconfig.shell.default.pkg;
-    };
-    shell.fish.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.fish;
-    };
+    shell.fish.enable = delib.boolOption (myconfig.shell.enable && myconfig.shell.default != null
+        && lib.getName myconfig.shell.fish.pkg == lib.getName myconfig.shell.default.pkg);
+    shell.fish.pkg = delib.packageOption pkgs.fish;
   };
 
   home.ifEnabled = { myconfig, ... }: {

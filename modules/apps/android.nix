@@ -4,20 +4,9 @@ delib.module {
 
   options = { myconfig, ... }: {
     apps.android = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = myconfig.gui.enable;
-      };
-      tools = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Android tools (adb, fastboot)";
-      };
-      screencast = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Android screen mirroring (scrcpy)";
-      };
+      enable = delib.boolOption myconfig.gui.enable;
+      tools = delib.description (delib.boolOption true) "Android tools (adb, fastboot)";
+      screencast = delib.description (delib.boolOption true) "Android screen mirroring (scrcpy)";
     };
   };
 

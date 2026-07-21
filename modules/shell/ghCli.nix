@@ -3,10 +3,7 @@ delib.module {
   name = "shell.ghCli";
 
   options = { myconfig, ... }: {
-    shell.ghCli.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable;
-    };
+    shell.ghCli.enable = delib.boolOption myconfig.shell.enable;
   };
 
   home.ifEnabled = {

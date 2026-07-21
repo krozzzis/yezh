@@ -3,14 +3,8 @@ delib.module {
   name = "terminal.wezterm";
 
   options = { myconfig, ... }: {
-    terminal.wezterm.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
-    terminal.wezterm.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.wezterm;
-    };
+    terminal.wezterm.enable = delib.boolOption myconfig.gui.enable;
+    terminal.wezterm.pkg = delib.packageOption pkgs.wezterm;
   };
 
   home.ifEnabled = {

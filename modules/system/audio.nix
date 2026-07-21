@@ -3,37 +3,13 @@ delib.module {
   name = "system.audio";
 
   options = { myconfig, ... }: {
-    system.audio.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
-    system.audio.quantum = lib.mkOption {
-      type = lib.types.int;
-      default = 128;
-      description = "Default PipeWire quantum (buffer size). 128 = ~2.7ms at 48kHz";
-    };
-    system.audio.rate = lib.mkOption {
-      type = lib.types.int;
-      default = 48000;
-    };
-    system.audio.minQuantum = lib.mkOption {
-      type = lib.types.int;
-      default = 32;
-    };
-    system.audio.maxQuantum = lib.mkOption {
-      type = lib.types.int;
-      default = 8192;
-    };
-    system.audio.performanceGovernor = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Set CPU governor to 'performance' for low-latency audio";
-    };
-    system.audio.proAudio = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Auto-set ALSA card to pro-audio profile (direct access, no mixing)";
-    };
+    system.audio.enable = delib.boolOption myconfig.gui.enable;
+    system.audio.quantum = delib.description (delib.intOption 128) "Default PipeWire quantum (buffer size). 128 = ~2.7ms at 48kHz";
+    system.audio.rate = delib.intOption 48000;
+    system.audio.minQuantum = delib.intOption 32;
+    system.audio.maxQuantum = delib.intOption 8192;
+    system.audio.performanceGovernor = delib.description (delib.boolOption true) "Set CPU governor to 'performance' for low-latency audio";
+    system.audio.proAudio = delib.description (delib.boolOption true) "Auto-set ALSA card to pro-audio profile (direct access, no mixing)";
   };
 
   nixos.ifEnabled = { myconfig, cfg, ... }: {

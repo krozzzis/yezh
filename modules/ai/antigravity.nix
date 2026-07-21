@@ -3,10 +3,7 @@ delib.module {
   name = "ai.antigravity";
 
   options = { myconfig, ... }: {
-    ai.antigravity.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    ai.antigravity.enable = delib.boolOption myconfig.gui.enable;
   };
 
   home.ifEnabled = {

@@ -4,15 +4,8 @@ delib.module {
 
   options = { myconfig, ... }: {
     apps.throne = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = myconfig.gui.enable;
-      };
-      tunMode = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable TUN mode for VPN";
-      };
+      enable = delib.boolOption myconfig.gui.enable;
+      tunMode = delib.description (delib.boolOption true) "Enable TUN mode for VPN";
     };
   };
 

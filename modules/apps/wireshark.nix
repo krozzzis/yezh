@@ -8,10 +8,7 @@ delib.module {
   name = "apps.wireshark";
 
   options = { myconfig, ... }: {
-    apps.wireshark.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    apps.wireshark.enable = delib.boolOption myconfig.gui.enable;
   };
 
   home.ifEnabled = {

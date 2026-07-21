@@ -3,15 +3,8 @@ delib.module {
   name = "shell.starship";
 
   options = { myconfig, ... }: {
-    shell.starship.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable;
-    };
-    shell.starship.useNerdFonts = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable Nerd Font icons for modules";
-    };
+    shell.starship.enable = delib.boolOption myconfig.shell.enable;
+    shell.starship.useNerdFonts = delib.description (delib.boolOption true) "Enable Nerd Font icons for modules";
   };
 
   myconfig.ifEnabled = { myconfig, ... }:

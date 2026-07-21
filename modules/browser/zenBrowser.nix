@@ -3,14 +3,8 @@ delib.module {
   name = "browser.zenBrowser";
 
   options = { myconfig, ... }: {
-    browser.zenBrowser.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
-    browser.zenBrowser.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    };
+    browser.zenBrowser.enable = delib.boolOption myconfig.gui.enable;
+    browser.zenBrowser.pkg = delib.packageOption (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default);
   };
 
   home.always.imports = [ inputs.zen-browser.homeModules.default ];

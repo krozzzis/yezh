@@ -3,14 +3,8 @@ delib.module {
   name = "media.vlc";
 
   options = { myconfig, ... }: {
-    media.vlc.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
-    media.vlc.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.vlc;
-    };
+    media.vlc.enable = delib.boolOption myconfig.gui.enable;
+    media.vlc.pkg = delib.packageOption pkgs.vlc;
   };
 
   nixos.ifEnabled = { myconfig, ... }: {

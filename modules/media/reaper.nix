@@ -3,20 +3,9 @@ delib.module {
   name = "media.reaper";
 
   options = { myconfig, ... }: {
-    media.reaper.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
-    media.reaper.quantum = lib.mkOption {
-      type = lib.types.int;
-      default = 256;
-      description = "JACK quantum (buffer size in frames) for Reaper";
-    };
-    media.reaper.rate = lib.mkOption {
-      type = lib.types.int;
-      default = 96000;
-      description = "Sample rate for Reaper";
-    };
+    media.reaper.enable = delib.boolOption myconfig.gui.enable;
+    media.reaper.quantum = delib.description (delib.intOption 256) "JACK quantum (buffer size in frames) for Reaper";
+    media.reaper.rate = delib.description (delib.intOption 96000) "Sample rate for Reaper";
   };
 
   home.ifEnabled = { cfg, ... }: {

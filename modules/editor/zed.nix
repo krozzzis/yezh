@@ -3,10 +3,7 @@ delib.module {
   name = "editor.zed";
 
   options = { myconfig, ... }: {
-    editor.zed.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    editor.zed.enable = delib.boolOption myconfig.gui.enable;
   };
 
   home.ifEnabled = { myconfig, ... }:

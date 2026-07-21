@@ -3,10 +3,7 @@ delib.module {
   name = "user.fonts";
 
   options = { myconfig, ... }: {
-    user.fonts.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-    };
+    user.fonts.enable = delib.boolOption true;
   };
 
   nixos.ifEnabled = { myconfig, ... }: {

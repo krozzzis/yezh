@@ -3,10 +3,7 @@ delib.module {
   name = "shell.fzf";
 
   options = { myconfig, ... }: {
-    shell.fzf.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
+    shell.fzf.enable = delib.boolOption false;
   };
 
   home.ifEnabled = {

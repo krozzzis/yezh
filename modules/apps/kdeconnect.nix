@@ -3,10 +3,7 @@ delib.module {
   name = "apps.kdeconnect";
 
   options = { myconfig, ... }: {
-    apps.kdeconnect.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    apps.kdeconnect.enable = delib.boolOption myconfig.gui.enable;
   };
 
   nixos.ifEnabled = {

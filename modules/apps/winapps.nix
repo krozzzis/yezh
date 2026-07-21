@@ -4,10 +4,7 @@ delib.module {
   name = "apps.winapps";
 
   options = { myconfig, ... }: {
-    apps.winapps.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    apps.winapps.enable = delib.boolOption myconfig.gui.enable;
   };
 
   nixos.ifEnabled = { myconfig, ... }:

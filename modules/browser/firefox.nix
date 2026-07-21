@@ -3,14 +3,8 @@ delib.module {
   name = "browser.firefox";
 
   options = { myconfig, ... }: {
-    browser.firefox.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
-    browser.firefox.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.firefox;
-    };
+    browser.firefox.enable = delib.boolOption myconfig.gui.enable;
+    browser.firefox.pkg = delib.packageOption pkgs.firefox;
   };
 
   home.ifEnabled = {

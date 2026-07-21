@@ -3,10 +3,7 @@ delib.module {
   name = "media.audacity";
 
   options = { myconfig, ... }: {
-    media.audacity.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    media.audacity.enable = delib.boolOption myconfig.gui.enable;
   };
 
   home.ifEnabled = {

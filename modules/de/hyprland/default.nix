@@ -3,10 +3,7 @@ delib.module {
   name = "de.hyprland";
 
   options = { myconfig, ... }: {
-    de.hyprland.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
+    de.hyprland.enable = delib.boolOption false;
     de.hyprland.launcher.default = lib.mkOption {
       type = lib.types.attrs;
       default = { pkg = pkgs.walker; };

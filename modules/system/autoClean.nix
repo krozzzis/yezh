@@ -3,15 +3,8 @@ delib.module {
   name = "system.autoClean";
 
   options = { myconfig, ... }: {
-    system.autoClean.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-    };
-    system.autoClean.keepGenerations = lib.mkOption {
-      type = lib.types.int;
-      default = 4;
-      description = "Number of system/home-manager generations to keep";
-    };
+    system.autoClean.enable = delib.boolOption true;
+    system.autoClean.keepGenerations = delib.description (delib.intOption 4) "Number of system/home-manager generations to keep";
   };
 
   nixos.ifEnabled = { myconfig, cfg, ... }: {

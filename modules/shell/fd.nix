@@ -3,10 +3,7 @@ delib.module {
   name = "shell.fd";
 
   options = { myconfig, ... }: {
-    shell.fd.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable;
-    };
+    shell.fd.enable = delib.boolOption myconfig.shell.enable;
   };
 
   home.ifEnabled = {

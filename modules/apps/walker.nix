@@ -3,14 +3,8 @@ delib.module {
   name = "apps.walker";
 
   options = { myconfig, ... }: {
-    apps.walker.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
-    apps.walker.pkg = lib.mkOption {
-      type = lib.types.package;
-      default = inputs.walker.packages.${pkgs.stdenv.hostPlatform.system}.default or pkgs.walker;
-    };
+    apps.walker.enable = delib.boolOption false;
+    apps.walker.pkg = delib.packageOption (inputs.walker.packages.${pkgs.stdenv.hostPlatform.system}.default or pkgs.walker);
   };
 
   nixos.always.nix.settings = {

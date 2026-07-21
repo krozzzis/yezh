@@ -4,10 +4,7 @@ delib.module {
   name = "shell.eza";
 
   options = { myconfig, ... }: {
-    shell.eza.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable;
-    };
+    shell.eza.enable = delib.boolOption myconfig.shell.enable;
   };
 
   home.ifEnabled = {

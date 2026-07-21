@@ -1,10 +1,16 @@
-{ delib, ... }:
+{ delib, lib, pkgs, ... }:
 delib.host {
   name = "nixlaptop";
 
   rice = "niri";
 
-  myconfig = { myconfig, ... }: {
+  myconfig = { myconfig, ... }: let
+    inherit (lib) getName;
+
+    app = pkg: { spawn = [ (getName pkg) ]; };
+    wm = { mod = [ "Mod" ]; };
+    wmCtrl = { mod = [ "Mod" "Ctrl" ]; };
+  in {
     dev.enable = true;
     desktop.enable = true;
 
@@ -25,11 +31,20 @@ delib.host {
     apps.swayimg.enable = true;
     apps.qpwgraph.enable = true;
     apps.cosmic.enable = true;
+    apps.arduinoIde.enable = true;
 
     shell.fzf.enable = true;
 
     system.libvirtd.enable = true;
     system.audio.enable = true;
+
+    config.shortcuts = [
+      # -- dynamic app spawns
+      (wm // { key = "Return"; action = app myconfig.terminal.default.pkg; title = "Open Terminal"; })
+      (wm // { key = "P";      action = app myconfig.de.niri.launcher.default.pkg; title = "Open Launcher"; })
+      (wm // { key = "E";      action = app myconfig.fileManager.default.pkg; title = "Open File Manager"; })
+      (wmCtrl // { key = "L";  action = app myconfig.browser.default.pkg; title = "Open Browser"; })
+    ];
   };
 
   home.home.stateVersion = "26.05";
@@ -54,6 +69,8 @@ delib.host {
     };
 
     services.blueman.enable = true;
+
+    environment.systemPackages = [ pkgs.python3 ];
 
     boot.tmp.useTmpfs = true;
   };

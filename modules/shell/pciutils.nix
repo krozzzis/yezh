@@ -3,10 +3,7 @@ delib.module {
   name = "shell.pciutils";
 
   options = { myconfig, ... }: {
-    shell.pciutils.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.shell.enable;
-    };
+    shell.pciutils.enable = delib.boolOption myconfig.shell.enable;
   };
 
   nixos.ifEnabled = {

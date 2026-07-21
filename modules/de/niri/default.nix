@@ -3,10 +3,7 @@ delib.module {
   name = "de.niri";
 
   options = { myconfig, ... }: {
-    de.niri.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    de.niri.enable = delib.boolOption myconfig.gui.enable;
     de.niri.launcher.default = lib.mkOption {
       type = lib.types.attrs;
       default = { pkg = myconfig.apps.walker.pkg; };

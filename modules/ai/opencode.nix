@@ -3,10 +3,7 @@ delib.module {
   name = "ai.opencode";
 
   options = { myconfig, ... }: {
-    ai.opencode.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;
-    };
+    ai.opencode.enable = delib.boolOption myconfig.gui.enable;
   };
 
   home.ifEnabled = { myconfig, ... }:
