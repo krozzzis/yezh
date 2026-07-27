@@ -3,9 +3,9 @@ delib.rice {
   name = "hyprland";
 
   myconfig = {
-    de.hyprland.enable = true;
-    apps.polkitLxqtAgent.enable = true;
-    system.sddm.enable = true;
+    yezh.de.hyprland.enable = true;
+    yezh.apps.polkitLxqtAgent.enable = true;
+    yezh.system.sddm.enable = true;
   };
 
   nixos = {

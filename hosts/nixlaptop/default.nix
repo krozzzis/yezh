@@ -11,39 +11,39 @@ delib.host {
     wm = { mod = [ "Mod" ]; };
     wmCtrl = { mod = [ "Mod" "Ctrl" ]; };
   in {
-    dev.enable = true;
-    desktop.enable = true;
+    user.dev.enable = true;
+    user.desktop.enable = true;
 
-    shell.default = myconfig.shell.fish;
-    editor.default = myconfig.editor.nixvim;
-    browser.default = myconfig.browser.zenBrowser;
-    fileManager.default = myconfig.fileManager.nautilus;
-    imageViewer.default = myconfig.apps.swayimg;
-    pdfViewer.default = myconfig.apps.cosmic.reader;
-    musicPlayer.default = myconfig.media.vlc;
-    videoPlayer.default = myconfig.media.vlc;
+    user.shell.default = myconfig.yezh.shell.fish;
+    user.editor.default = myconfig.yezh.editor.nixvim;
+    user.browser.default = myconfig.yezh.browser.zenBrowser;
+    user.fileManager.default = myconfig.yezh.fileManager.nautilus;
+    user.imageViewer.default = myconfig.yezh.apps.swayimg;
+    user.pdfViewer.default = myconfig.yezh.apps.cosmic.reader;
+    user.musicPlayer.default = myconfig.yezh.media.vlc;
+    user.videoPlayer.default = myconfig.yezh.media.vlc;
 
-    editor.nixvim.enable = true;
-    browser.librewolf.enable = false;
-    media.reaper.enable = true;
-    terminal.wezterm.enable = true;
-    apps.wireshark.enable = true;
-    apps.swayimg.enable = true;
-    apps.qpwgraph.enable = true;
-    apps.cosmic.enable = true;
-    apps.arduinoIde.enable = true;
+    yezh.editor.nixvim.enable = true;
+    yezh.browser.librewolf.enable = false;
+    yezh.media.reaper.enable = true;
+    yezh.terminal.wezterm.enable = true;
+    yezh.apps.wireshark.enable = true;
+    yezh.apps.swayimg.enable = true;
+    yezh.apps.qpwgraph.enable = true;
+    yezh.apps.cosmic.enable = true;
+    yezh.apps.arduinoIde.enable = true;
 
-    shell.fzf.enable = true;
+    yezh.shell.fzf.enable = true;
 
-    system.libvirtd.enable = true;
-    system.audio.enable = true;
+    yezh.system.libvirtd.enable = true;
+    yezh.system.audio.enable = true;
 
-    config.shortcuts = [
+    user.shortcuts = [
       # -- dynamic app spawns
-      (wm // { key = "Return"; action = app myconfig.terminal.default.pkg; title = "Open Terminal"; })
-      (wm // { key = "P";      action = app myconfig.de.niri.launcher.default.pkg; title = "Open Launcher"; })
-      (wm // { key = "E";      action = app myconfig.fileManager.default.pkg; title = "Open File Manager"; })
-      (wmCtrl // { key = "L";  action = app myconfig.browser.default.pkg; title = "Open Browser"; })
+      (wm // { key = "Return"; action = app myconfig.user.terminal.default.pkg; title = "Open Terminal"; })
+      (wm // { key = "P";      action = app myconfig.yezh.de.niri.launcher.default.pkg; title = "Open Launcher"; })
+      (wm // { key = "E";      action = app myconfig.user.fileManager.default.pkg; title = "Open File Manager"; })
+      (wmCtrl // { key = "L";  action = app myconfig.user.browser.default.pkg; title = "Open Browser"; })
     ];
   };
 

@@ -18,7 +18,7 @@ delib.module {
 
       inter
       jetbrains-mono
-    ] ++ lib.optionals myconfig.gui.fonts.nerdfonts [
+    ] ++ lib.optionals myconfig.user.gui.fonts.nerdfonts [
       nerd-fonts.fira-code
       nerd-fonts.jetbrains-mono
       nerd-fonts.symbols-only

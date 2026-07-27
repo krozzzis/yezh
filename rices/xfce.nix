@@ -3,7 +3,7 @@ delib.rice {
   name = "xfce";
 
   myconfig = {
-    de.xfce.enable = true;
+    yezh.de.xfce.enable = true;
   };
 
   nixos = {

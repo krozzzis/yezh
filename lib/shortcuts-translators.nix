@@ -28,7 +28,7 @@ let
 
   toNiriBinds =
     { myconfig }:
-    listToAttrs (map toNiriBind (filter (s: s.enable) (myconfig.config.shortcuts or [ ])));
+    listToAttrs (map toNiriBind (filter (s: s.enable) (myconfig.user.shortcuts or [ ])));
 
   # -- Hyprland translator --
 
@@ -105,7 +105,7 @@ let
   toHyprlandBindsList =
     { myconfig }:
     lib.filter (x: x != null) (
-      map toHyprlandStr (filter (s: s.enable && !isWorkspaceAction s) (myconfig.config.shortcuts or [ ]))
+      map toHyprlandStr (filter (s: s.enable && !isWorkspaceAction s) (myconfig.user.shortcuts or [ ]))
     );
 
 in

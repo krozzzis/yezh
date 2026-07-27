@@ -8,11 +8,11 @@ delib.rice {
   name = "niri";
 
   myconfig = {
-    de.niri.enable = true;
-    de.dms.enable = true;
-    apps.walker.enable = true;
+    yezh.de.niri.enable = true;
+    yezh.de.dms.enable = true;
+    yezh.apps.walker.enable = true;
 
-    config.shortcuts = [
+    user.shortcuts = [
 
       # -- volume
       { key = "XF86AudioRaiseVolume";  action = { spawn = [ "pamixer" "-i" "5" ]; }; title = "Volume Up"; }
