@@ -14,34 +14,35 @@ delib.host {
     user.dev.enable = true;
     user.desktop.enable = true;
 
-    user.shell.default = myconfig.yezh.shell.fish;
-    user.editor.default = myconfig.yezh.editor.nixvim;
-    user.browser.default = myconfig.yezh.browser.zenBrowser;
-    user.fileManager.default = myconfig.yezh.fileManager.nautilus;
-    user.imageViewer.default = myconfig.yezh.apps.swayimg;
-    user.pdfViewer.default = myconfig.yezh.apps.cosmic.reader;
-    user.musicPlayer.default = myconfig.yezh.media.vlc;
-    user.videoPlayer.default = myconfig.yezh.media.vlc;
+    user.shell.default = myconfig.osa.shell.fish;
+    user.editor.default = myconfig.osa.editor.nixvim;
+    user.browser.default = myconfig.osa.browser.zenBrowser;
+    user.fileManager.default = myconfig.osa.fileManager.nautilus;
+    user.imageViewer.default = myconfig.osa.apps.swayimg;
+    user.pdfViewer.default = myconfig.osa.apps.cosmic.reader;
+    user.musicPlayer.default = myconfig.osa.media.vlc;
+    user.videoPlayer.default = myconfig.osa.media.vlc;
 
-    yezh.editor.nixvim.enable = true;
-    yezh.browser.librewolf.enable = false;
-    yezh.media.reaper.enable = true;
-    yezh.terminal.wezterm.enable = true;
-    yezh.apps.wireshark.enable = true;
-    yezh.apps.swayimg.enable = true;
-    yezh.apps.qpwgraph.enable = true;
-    yezh.apps.cosmic.enable = true;
-    yezh.apps.arduinoIde.enable = true;
+    osa.editor.nixvim.enable = true;
+    osa.browser.librewolf.enable = false;
+    osa.media.reaper.enable = true;
+    osa.media.patchbay.enable = true;
+    osa.terminal.wezterm.enable = true;
+    osa.apps.wireshark.enable = true;
+    osa.apps.swayimg.enable = true;
+    osa.apps.qpwgraph.enable = true;
+    osa.apps.cosmic.enable = true;
+    osa.apps.arduinoIde.enable = true;
 
-    yezh.shell.fzf.enable = true;
+    osa.shell.fzf.enable = true;
 
-    yezh.system.libvirtd.enable = true;
-    yezh.system.audio.enable = true;
+    osa.system.libvirtd.enable = true;
+    osa.system.audio.enable = true;
 
     user.shortcuts = [
       # -- dynamic app spawns
       (wm // { key = "Return"; action = app myconfig.user.terminal.default.pkg; title = "Open Terminal"; })
-      (wm // { key = "P";      action = app myconfig.yezh.de.niri.launcher.default.pkg; title = "Open Launcher"; })
+      (wm // { key = "P";      action = app myconfig.osa.de.niri.launcher.default.pkg; title = "Open Launcher"; })
       (wm // { key = "E";      action = app myconfig.user.fileManager.default.pkg; title = "Open File Manager"; })
       (wmCtrl // { key = "L";  action = app myconfig.user.browser.default.pkg; title = "Open Browser"; })
     ];
@@ -73,5 +74,12 @@ delib.host {
     environment.systemPackages = [ pkgs.python3 ];
 
     boot.tmp.useTmpfs = true;
+
+    # Lets `nix build` cross-compile aarch64 hosts (e.g. pi-backup) via QEMU emulation.
+    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+    # Root is LUKS+btrfs (see disko.nix); ZFS is unused here but its default
+    # inclusion drags in a separate out-of-tree kernel module build.
+    boot.supportedFilesystems.zfs = false;
   };
 }

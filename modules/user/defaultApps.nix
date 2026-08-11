@@ -5,16 +5,16 @@ delib.module {
   options = { myconfig, ... }: {
     user.terminal.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = myconfig.yezh.terminal.wezterm.pkg; };
+      default = { pkg = myconfig.osa.terminal.wezterm.pkg; };
     };
     user.editor.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = myconfig.yezh.editor.vim.pkg; };
+      default = { pkg = myconfig.osa.editor.vim.pkg; };
     };
     user.browser.default = lib.mkOption {
       type = lib.types.attrs;
-      default = if myconfig.yezh.browser.zenBrowser.enable or false then { pkg = myconfig.yezh.browser.zenBrowser.pkg; }
-                else if myconfig.yezh.browser.firefox.enable or false then { pkg = myconfig.yezh.browser.firefox.pkg; }
+      default = if myconfig.osa.browser.zenBrowser.enable or false then { pkg = myconfig.osa.browser.zenBrowser.pkg; }
+                else if myconfig.osa.browser.firefox.enable or false then { pkg = myconfig.osa.browser.firefox.pkg; }
                 else { pkg = pkgs.firefox; };
     };
     user.fileManager.default = lib.mkOption {
@@ -23,19 +23,19 @@ delib.module {
     };
     user.musicPlayer.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = myconfig.yezh.media.vlc.pkg; };
+      default = { pkg = myconfig.osa.media.vlc.pkg; };
     };
     user.videoPlayer.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = myconfig.yezh.media.vlc.pkg; };
+      default = { pkg = myconfig.osa.media.vlc.pkg; };
     };
     user.imageViewer.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = myconfig.yezh.apps.swayimg.pkg; };
+      default = { pkg = myconfig.osa.apps.swayimg.pkg; };
     };
     user.pdfViewer.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = myconfig.yezh.apps.cosmic.reader.pkg; };
+      default = { pkg = myconfig.osa.apps.cosmic.reader.pkg; };
     };
   };
 

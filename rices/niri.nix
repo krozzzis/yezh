@@ -8,9 +8,9 @@ delib.rice {
   name = "niri";
 
   myconfig = {
-    yezh.de.niri.enable = true;
-    yezh.de.dms.enable = true;
-    yezh.apps.walker.enable = true;
+    osa.de.niri.enable = true;
+    osa.de.dms.enable = true;
+    osa.apps.walker.enable = true;
 
     user.shortcuts = [
 

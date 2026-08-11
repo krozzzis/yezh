@@ -1,168 +1,57 @@
-# Yezh
+# OSA
 
-NixOS configuration for **nixlaptop** — niri/Wayland, LUKS full-disk encryption, btrfs.
+Personal NixOS configuration built on [denix](https://github.com/yunfachi/denix),
+a modular system on top of NixOS + home-manager.
 
----
+## Hosts
 
-## Disk layout
+### nixlaptop
 
-```
-/dev/nvme0n1
-├── nvme0n1p1   1 GiB    FAT32         /boot (EFI)
-└── nvme0n1p2   rest     LUKS2
-                          └── btrfs "nixos"
-                               ├── @           /
-                               ├── @home       /home
-                               ├── @nix        /nix
-                               ├── @log        /var/log
-                               ├── @snapshots  /.snapshots
-                               └── @swap       /swap  (12 GiB swapfile)
-```
+Main desktop — niri/Wayland, DMS shell, LUKS2-encrypted btrfs on NVMe,
+systemd-boot/EFI.
 
-All btrfs subvolumes use `compress=zstd:3` + `noatime`.  
-TRIM passthrough (`allowDiscards`) is enabled — safe for NVMe/SSD.
+### eeepc
 
----
+ASUS Eee PC 1001PXD netbook (2010 Atom N455, ~1GB RAM), x86_64. Same
+niri/DMS shell as nixlaptop but pared down (no office suite, no AI
+assistants, no VMs), plain ext4 + swap partition via GRUB/BIOS boot —
+no LUKS/btrfs, too slow for it on this CPU.
 
-## Fresh install
+### pi-backup
 
-### 0. Boot the NixOS installer
+Raspberry Pi 3B (aarch64), headless backup server — SD-card image, plain
+ext4, zram swap, a trimmed vendor kernel (no sound/media/BT), and a
+hardware watchdog + capped journald for unattended operation.
 
-Download the [NixOS minimal ISO](https://nixos.org/download/) and write it to a USB drive:
+## Offline installer images
 
-```bash
-# on another machine
-dd if=nixos-minimal-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
-```
-
-Boot the target laptop from USB.
-
-### 1. Connect to the internet
+Any host+rice combination that's disko-partitioned and boots from an ISO
+(x86_64/i686 — not pi-backup's aarch64 SD-card image) automatically gets
+a matching offline installer, built once in `lib/installer.nix`. List
+them with `nix flake show` under `packages.x86_64-linux` (e.g.
+`eeepc-installer`, `nixlaptop-niri-installer`).
 
 ```bash
-# Wi-Fi
-nmcli device wifi connect "SSID" password "password"
-
-# or just use Ethernet — it comes up automatically
-ping nixos.org
+nix build .#eeepc-installer
+sudo dd if=result/iso/nixos-minimal-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
 ```
 
-### 2. Clone the repo
+Boot the target machine from that USB stick and run:
 
 ```bash
-nix-shell -p git
-git clone https://github.com/<you>/yezh /mnt/yezh
-cd /mnt/yezh
+osa-install /dev/sda   # the exact device the image was built for
 ```
 
-### 3. Check the disk device name
+It partitions, formats, and installs the exact target the ISO was built
+for — fully offline, no network needed. Unlike `disko-install`, it does
+not re-evaluate the flake on the install target; it runs the toplevel
+and disko script that were already built when the ISO was made, which
+matters on weak hardware like eeepc.
+
+For a manual install instead (e.g. to pick a different disk or tweak
+config first), boot any NixOS installer, clone this repo, then:
 
 ```bash
-lsblk
+sudo nix run github:nix-community/disko -- --mode disko --flake .#<host>
+sudo nixos-install --flake .#<host> --root /mnt
 ```
-
-If your NVMe shows up as something other than `/dev/nvme0n1`, edit
-`hosts/nixlaptop/disko.nix` before the next step:
-
-```nix
-device = "/dev/nvme0n1";   # ← change this
-```
-
-### 4. Partition, format, and mount with disko
-
-> **⚠ This erases the entire disk.**
-
-```bash
-sudo nix run github:nix-community/disko -- \
-  --mode disko \
-  --flake .#nixlaptop
-```
-
-disko will:
-1. Create a GPT partition table
-2. Create the EFI partition and format it as FAT32
-3. Create the LUKS2 container — **you will be prompted to set the encryption passphrase**
-4. Create the btrfs filesystem and all subvolumes inside LUKS
-5. Mount everything under `/mnt`
-
-### 5. Generate hardware config (optional sanity check)
-
-```bash
-nixos-generate-config --root /mnt --show-hardware-config
-```
-
-Make sure the kernel modules and CPU section match what's in
-`hosts/nixlaptop/hardware.nix`. Update if needed.
-
-### 6. Install
-
-```bash
-sudo nixos-install --flake .#nixlaptop --root /mnt
-```
-
-You will be asked to set the **root password** at the end.
-
-### 7. Reboot
-
-```bash
-sudo umount -R /mnt
-sudo reboot
-```
-
-Remove the USB drive. The bootloader will ask for the LUKS passphrase on every boot.
-
-### 8. First login
-
-Log in as `krozzzis` (initial password is the username itself — change it immediately):
-
-```bash
-passwd
-```
-
----
-
-## Rebuild after config changes
-
-```bash
-sudo nixos-rebuild switch --flake .#nixlaptop
-```
-
----
-
-## Optional: enroll a TPM2 key (skip passphrase on boot)
-
-After a successful install:
-
-```bash
-sudo systemd-cryptenroll \
-  --tpm2-device=auto \
-  --tpm2-pcrs=0+7 \
-  /dev/nvme0n1p2
-```
-
-Then add to `hosts/nixlaptop/disko.nix` inside the `luks` block:
-
-```nix
-settings = {
-  allowDiscards = true;
-  bypassWorkqueues = true;
-};
-extraFormatArgs = [ "--pbkdf=argon2id" ];
-```
-
-And in `hosts/nixlaptop/boot.nix`:
-
-```nix
-boot.initrd.systemd.emergencyAccess = true; # keep passphrase fallback
-```
-
----
-
-## Snapshots with snapper (optional)
-
-```bash
-sudo snapper -c root create-config /
-sudo snapper -c home  create-config /home
-```
-
-Snapshots land in `/.snapshots` (the `@snapshots` btrfs subvolume).

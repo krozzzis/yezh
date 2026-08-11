@@ -11,6 +11,6 @@ delib.module {
     user.gui.enable = true;
     user.shell.enable = true;
 
-    yezh.system.ntfs.enable = false;
+    osa.system.ntfs.enable = false;
   };
 }

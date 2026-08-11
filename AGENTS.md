@@ -1,6 +1,6 @@
-# Проект Yezh — Описание для агентов
+# Проект OSA — Описание для агентов
 
-**Yezh** — NixOS конфигурация. Основана на [denix](https://github.com/yunfachi/denix) — модульной системе поверх NixOS + home-manager.
+**OSA** — NixOS конфигурация. Основана на [denix](https://github.com/yunfachi/denix) — модульной системе поверх NixOS + home-manager.
 
 ---
 
@@ -18,7 +18,7 @@ flake.nix        ← точка входа, все inputs и outputs
 │   ├── browser/ ← браузеры
 │   ├── apps/    ← приложения
 │   ├── media/   ← медиа
-│   ├── ai/      ← AI инструменты (opencode, antigravity)
+│   ├── ai/      ← AI инструменты (opencode)
 │   ├── dev/     ← LSP и MCP серверы
 │   ├── fileManager/
 │   ├── network/

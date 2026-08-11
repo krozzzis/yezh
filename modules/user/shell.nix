@@ -8,7 +8,7 @@ delib.module {
     user.shell.default = lib.mkOption {
       type = lib.types.nullOr (lib.types.attrs);
       default = null;
-      description = "Default shell module (set to myconfig.yezh.shell.zsh or myconfig.yezh.shell.fish in host)";
+      description = "Default shell module (set to myconfig.osa.shell.zsh or myconfig.osa.shell.fish in host)";
     };
   };
 
