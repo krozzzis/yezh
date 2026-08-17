@@ -1,4 +1,4 @@
-{ delib, lib, pkgs, ... }:
+{ delib, ... }:
 delib.module {
   name = "osa.shell.fastfetch";
 
@@ -7,8 +7,9 @@ delib.module {
   };
 
   home.ifEnabled = {
-    home.packages = with pkgs; [
-      fastfetch
-    ];
+    programs.fastfetch = {
+      enable = true;
+      settings.display.showLogo = true;
+    };
   };
 }

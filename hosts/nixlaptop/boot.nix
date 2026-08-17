@@ -1,4 +1,4 @@
-{ delib, pkgs, ... }:
+{ delib, ... }:
 delib.host {
   name = "nixlaptop";
 
@@ -12,13 +12,8 @@ delib.host {
         timeout = 0;
       };
 
-      plymouth = {
-        enable = true;
-        theme = "nixos-bgrt";
-        themePackages = with pkgs; [
-          nixos-bgrt-plymouth
-        ];
-      };
+      # theme/themePackages come from osa.system.branding.plymouth.*
+      plymouth.enable = true;
 
       # Enable "Silent boot"
       consoleLogLevel = 3;
