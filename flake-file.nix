@@ -1,83 +1,10 @@
 { lib, ... }:
 let
   flakeInputs = import ./lib/flake-inputs.nix { inherit lib; };
-  moduleDirs = [
-    ./hosts
-    ./modules
-    ./rices
-  ];
-
-  realOutputs =
-    { denix, ... }@inputs:
-    let
-      lib = inputs.nixpkgs.lib;
-
-      mkConfigurations =
-        moduleSystem:
-        denix.lib.configurations {
-          inherit moduleSystem;
-          homeManagerUser = "krozzzis";
-
-          paths = moduleDirs;
-          # inputs.nix siblings are for flake-file (see ./lib/flake-inputs.nix),
-          # not denix modules -- keep denix from tripping over them.
-          exclude = flakeInputs.findPaths moduleDirs;
-
-          extensions = with denix.lib.extensions; [
-            args
-            (base.withConfig {
-              args.enable = true;
-            })
-          ];
-
-          specialArgs = {
-            inherit inputs;
-          };
-        };
-
-      nixosConfigurationsBase = mkConfigurations "nixos";
-
-      # A host+rice combination gets an offline installer ISO iff it's
-      # partitioned via disko and targets a platform that actually boots
-      # from an ISO (x86_64/i686 BIOS+UEFI machines) — e.g. pi-backup's
-      # aarch64 SD-card image is a self-contained flashable image already
-      # and has no `disko.devices` at all, so it's skipped automatically.
-      isInstallable =
-        _name: cfg:
-        let
-          system = cfg.config.nixpkgs.hostPlatform.system;
-        in
-        (system == "x86_64-linux" || system == "i686-linux")
-        && (cfg.config ? disko)
-        && cfg.config.disko.devices.disk != { };
-
-      mkInstaller = import ./lib/installer.nix { inherit inputs; };
-
-      installableTargets = lib.filterAttrs isInstallable nixosConfigurationsBase;
-
-      installerConfigurations = lib.mapAttrs' (
-        name: target: lib.nameValuePair "${name}-installer" (mkInstaller { targetName = name; inherit target; })
-      ) installableTargets;
-
-      installerPackages = lib.foldl' (
-        acc: name:
-        let
-          target = installableTargets.${name};
-          system = target.config.nixpkgs.hostPlatform.system;
-        in
-        lib.recursiveUpdate acc {
-          ${system}."${name}-installer" = installerConfigurations."${name}-installer".config.system.build.isoImage;
-        }
-      ) { } (builtins.attrNames installableTargets);
-    in
-    {
-      nixosConfigurations = nixosConfigurationsBase // installerConfigurations;
-      homeConfigurations = mkConfigurations "home";
-      packages = installerPackages;
-    };
+  moduleDirs = [ ./modules ];
 in
 {
-  description = "An OSA operating system. With Denix";
+  description = "OSA -- reusable denix module library for NixOS + home-manager. hosts/ and user identity live in separate flakes (osa-host, osa-user) that depend on this one.";
 
   imports = flakeInputs.importModules moduleDirs;
 
@@ -117,6 +44,10 @@ in
   # transitively (nixpkgs/home-manager/denix), plus flake-file itself.
   # Everything else lives in a sibling `inputs.nix` next to whichever
   # module(s) actually reference `inputs.<name>` -- see ./lib/flake-inputs.nix.
+  #
+  # Downstream flakes (osa-user, osa-host) declare the SAME core inputs
+  # themselves (chicken-and-egg-exempt bootstrap set) and pull in the rest
+  # by running the same collectInputModules scan over `${inputs.osa}/modules`.
   flake-file.inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -153,5 +84,10 @@ in
     };
   };
 
-  outputs = realOutputs;
+  # This flake is a module library, not a host builder -- hosts/ moved to
+  # osa-host, which is what actually runs denix.lib.configurations to
+  # produce nixosConfigurations. Nothing here needs `inputs` at eval time,
+  # so there's no bootstrap chicken-and-egg like flake-file.nix's own
+  # `outputs` had to work around.
+  outputs = _inputs: { };
 }
