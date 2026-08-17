@@ -33,7 +33,17 @@ delib.module {
       # DISPLAY/XAUTHORITY value.
       (writeShellScriptBin "gparted" ''
         set -euo pipefail
-        ${xhost}/bin/xhost +si:localuser:root >/dev/null
+        # Launchers that spawn us without a controlling terminal (walker/
+        # elephant, via niri's `spawn` action) hand this script stdio that
+        # isn't safely writable. `xhost`/`pkexec` writing to a broken
+        # stdout/stderr then trips SIGPIPE, and `set -e` kills the script
+        # before pkexec ever execs gparted -- silently, since the error
+        # message itself can't be written either. Terminals and DMS's own
+        # launcher (which gives child processes real pipes) don't hit
+        # this, which is why it only ever failed from walker. Give
+        # ourselves stdio that's always valid, independent of the caller.
+        exec </dev/null >/dev/null 2>&1
+        ${xhost}/bin/xhost +si:localuser:root
         # Absolute path, not bare `env`: this system's uutils-coreutils is
         # hiPrio'd ahead of GNU coreutils on $PATH, and pkexec resolves
         # PROGRAM through its own restricted lookup, which landed on

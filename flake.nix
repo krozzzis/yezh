@@ -25,11 +25,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     silentSDDM = {
       url = "github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -119,10 +114,6 @@
             ./hosts
             ./modules
             ./rices
-          ];
-
-          extraModules = inputs.nixpkgs.lib.optionals (moduleSystem == "nixos") [
-            inputs.sops-nix.nixosModules.sops
           ];
 
           extensions = with denix.lib.extensions; [

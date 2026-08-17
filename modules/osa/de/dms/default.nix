@@ -18,6 +18,15 @@ delib.module {
       configHome = "/home/${myconfig.user.constants.username}";
     };
 
+    # dms-greeter's compositor (niri) is a real DRM/KMS Wayland compositor,
+    # so it can take over the display cleanly on its own. By default greetd
+    # waits for plymouth-quit-wait.service before it even starts, which
+    # drops the console to text mode for a moment before the greeter has
+    # anything painted -- that's the visible flicker (and where stray boot
+    # console text, like systemd deprecation warnings, can flash through).
+    # Letting the greeter manage the handoff itself removes that gap.
+    services.greetd.greeterManagesPlymouth = true;
+
     services.upower.enable = true;
 
     environment.systemPackages = with pkgs; [

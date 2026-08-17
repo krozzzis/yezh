@@ -17,10 +17,17 @@ delib.host {
   };
 
   home.home.stateVersion = "26.05";
-  nixos.system.stateVersion = "26.05";
 
-  nixos = {
+  nixos = { myconfig, ... }: {
+    system.stateVersion = "26.05";
     time.timeZone = "Asia/Yekaterinburg";
+
+    # No password login at all (see modules/user/server.nix -- password
+    # auth is off and this account has no password hash either); SSH key
+    # only.
+    users.users.${myconfig.user.constants.username}.openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3JM/W76cJjAW/1QflJsfrFrL9UuVR5UGmnyhjbIycY schumov.nn@gmail.com"
+    ];
 
     # RPi 3B has 1GB RAM and no swap configured at all otherwise; zram gives
     # cheap headroom for backup workloads (restic/borg compression, activation)

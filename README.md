@@ -55,3 +55,28 @@ config first), boot any NixOS installer, clone this repo, then:
 sudo nix run github:nix-community/disko -- --mode disko --flake .#<host>
 sudo nixos-install --flake .#<host> --root /mnt
 ```
+
+## Raspberry Pi SD card image (pi-backup)
+
+pi-backup isn't disko-partitioned (see above), so it doesn't get an
+offline installer — it builds straight to a flashable SD card image via
+nixpkgs' own `sd-image-aarch64.nix`:
+
+```bash
+nix build .#nixosConfigurations.pi-backup.config.system.build.sdImage
+```
+
+This cross-compiles (see `hosts/pi-backup/default.nix` for why) rather
+than emulating aarch64, but still expect a long first build — the kernel
+and everything above it builds from source. Output is a zstd-compressed
+image at `result/sd-image/*.img.zst`; decompress on the fly straight onto
+the card (`/dev/sdX`, not a partition):
+
+```bash
+zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdX bs=4M status=progress oflag=sync
+```
+
+Login is authorized-key-only (baked into the image at build time, see
+`hosts/pi-backup/default.nix`) with no password set at all, so there's
+nothing to stage on the card by hand before first boot. Boot it, find its
+DHCP lease, `ssh krozzzis@<ip>`.

@@ -15,8 +15,8 @@ delib.module {
     services.openssh.enable = true;
 
     # Servers are expected to be accessed via authorized keys, configured
-    # per-host (e.g. via sops-nix). Password auth stays off so a server
-    # never sits on the network reachable with just a guessed password.
+    # per-host. Password auth stays off so a server never sits on the
+    # network reachable with just a guessed password.
     services.openssh.settings.PasswordAuthentication = false;
     services.openssh.settings.PermitRootLogin = "no";
   };

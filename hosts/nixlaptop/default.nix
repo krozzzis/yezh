@@ -64,6 +64,19 @@ delib.host {
     powerManagement.enable = true;
     services.power-profiles-daemon.enable = true;
 
+    # Hardware only supports s2idle (no "deep" sleep -- see
+    # /sys/power/mem_sleep), which keeps draining the battery for as long as
+    # the lid stays closed. suspend-then-hibernate drops into a real
+    # hibernate after HibernateDelaySec so a long nap doesn't cost battery;
+    # a swap-backed resume image is already set up via
+    # boot.resumeDevice/resume_offset above.
+    services.logind.settings.Login = {
+      HandleLidSwitch = "suspend-then-hibernate";
+      HandleLidSwitchExternalPower = "suspend-then-hibernate";
+      HandleSuspendKey = "suspend-then-hibernate";
+    };
+    systemd.sleep.settings.Sleep.HibernateDelaySec = "30min";
+
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;
