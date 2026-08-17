@@ -7,13 +7,16 @@
 ## Архитектура
 
 ```
-flake.nix        ← точка входа, все inputs и outputs
+flake.nix        ← СГЕНЕРИРОВАННЫЙ файл (github:vic/flake-file), не редактировать руками
+flake-file.nix   ← реальная точка входа: outputs (denix) + базовые inputs
 ├── hosts/       ← конфигурации машин
+│   ├── inputs.nix   ← flake inputs, общие для всех хостов (disko, nixos-hardware)
 │   └── nixlaptop/
 ├── modules/     ← переиспользуемые модули
 │   ├── config/  ← системные мета-опции (desktop/server/gui/shell/dev)
 │   ├── shell/   ← shell утилиты (все включаются при shell.enable)
 │   ├── de/      ← Desktop Environments (niri, hyprland, xfce)
+│   │   └── dms/inputs.nix, niri/inputs.nix, ...  ← flake inputs конкретного модуля
 │   ├── editor/  ← редакторы (nixvim, vim, zed)
 │   ├── browser/ ← браузеры
 │   ├── apps/    ← приложения
@@ -27,6 +30,8 @@ flake.nix        ← точка входа, все inputs и outputs
 │   ├── terminal/
 │   └── user/    ← шрифты, раскладки
 ├── rices/       ← пресеты DE (rice = desktop environment preset)
+├── lib/
+│   └── flake-inputs.nix  ← собирает все inputs.nix для flake-file
 ├── flake.lock
 ├── AGENTS.md
 └── README.md
@@ -34,9 +39,22 @@ flake.nix        ← точка входа, все inputs и outputs
 
 ---
 
-## flake.nix (как всё собирается)
+## flake.nix / flake-file.nix (как всё собирается)
 
-- **Модульная система**: `denix` — он проходит по `./hosts`, `./modules`, `./rices`, собирает `nixosConfigurations` и `homeConfigurations`.
+`flake.nix` больше не редактируется руками — это сгенерированный
+[flake-file](https://github.com/vic/flake-file) shim (`evalModules` +
+`inputs.flake-file.flakeModules.flake` + `./flake-file.nix`). Реальный
+`outputs` и базовый набор inputs (`nixpkgs`, `home-manager`, `denix`,
+`flake-file`) живут в `flake-file.nix`.
+
+Любой другой flake input объявляется рядом с модулем, который его
+использует, в файле `inputs.nix` (см. `lib/flake-inputs.nix`,
+`modules/osa/de/dms/inputs.nix` как пример) — не в корневом flake.nix.
+После добавления/изменения `inputs.nix` выполни `nix run .#write-flake`,
+чтобы перегенерировать `flake.nix` (или запусти `nix flake check` —
+`checks.flake-file-in-sync` упадёт, если файл рассинхронизирован).
+
+- **Модульная система**: `denix` — он проходит по `./hosts`, `./modules`, `./rices`, собирает `nixosConfigurations` и `homeConfigurations`. `inputs.nix`-файлы в этих директориях явно исключены из denix-скана (`exclude` в `flake-file.nix`) — их видит только flake-file.
 - **Extensions**: `args` (проброс `cfg` в модули) + `base.withConfig` (включает `myconfig`).
 - **Пользователь**: `krozzzis`.
 - **specialArgs**: пробрасываются `inputs` (все флейки).
@@ -93,7 +111,17 @@ delib.module {
 };
 ```
 
-3. Если модулю нужен flake input — добавь его в `flake.nix`, а в модуле получи через `inputs.<name>`.
+3. Если модулю нужен flake input — создай (или дополни) `inputs.nix` рядом с модулем:
+   ```nix
+   { ... }:
+   {
+     flake-file.inputs.<name> = {
+       url = "github:...";
+       inputs.nixpkgs.follows = "nixpkgs";
+     };
+   }
+   ```
+   Затем `nix run .#write-flake`, чтобы перегенерировать `flake.nix`. В самом модуле input доступен как обычно, через `inputs.<name>`.
 4. Если модуль не требует опций включения — используй `delib.singleEnableOption true/false`.
 5. Включи модуль в хосте через `myconfig.категория.имя.enable = true;`.
 
@@ -134,7 +162,7 @@ delib.module {
 1. Создай `hosts/<name>/default.nix` с `delib.host { name = "<name>"; }`.
 2. Укажи `rice = "<name>";` для выбора DE.
 3. Настрой нужные модули через `myconfig.*`.
-4. Добавь `hosts/<name>` в `flake.nix` — denix подхватит автоматически.
+4. Ничего добавлять в `flake.nix`/`flake-file.nix` не нужно — denix сканирует `./hosts` целиком и подхватит новую директорию автоматически. Если хосту нужен свой flake input — `hosts/<name>/inputs.nix`, как в "Как создать новый модуль".
 
 ## Как создать новый rice
 
@@ -155,4 +183,10 @@ home-manager switch --flake .#nixlaptop
 
 # Очистка старых поколений
 ./clear.sh
+
+# Перегенерировать flake.nix после правки flake-file.nix/inputs.nix
+nix run .#write-flake
+
+# Проверить, что flake.nix не рассинхронизирован (среди прочего)
+nix flake check
 ```
