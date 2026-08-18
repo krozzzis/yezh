@@ -1,82 +1,105 @@
 # OSA
 
-Personal NixOS configuration built on [denix](https://github.com/yunfachi/denix),
-a modular system on top of NixOS + home-manager.
+A reusable [denix](https://github.com/yunfachi/denix) module library for
+NixOS + home-manager. This flake has no hosts, no user identity, and no
+`nixosConfigurations` of its own — it's just `modules/`, meant to be
+imported by whatever flake actually builds a machine.
 
-## Hosts
+Personal configuration built on top of OSA lives in separate,
+private-by-default flakes:
 
-### nixlaptop
+- [osa-krozzzis](https://github.com/krozzzis/osa-krozzzis) — krozzzis's
+  identity, desktop/server profiles, and rice (DE) presets.
+- osa-hosts — krozzzis's actual machine configurations (private).
 
-Main desktop — niri/Wayland, DMS shell, LUKS2-encrypted btrfs on NVMe,
-systemd-boot/EFI.
+This split is deliberate: `osa` is the reusable part anyone can depend on;
+everything person- or machine-specific lives downstream.
 
-### eeepc
+## What's in `modules/`
 
-ASUS Eee PC 1001PXD netbook (2010 Atom N455, ~1GB RAM), x86_64. Same
-niri/DMS shell as nixlaptop but pared down (no office suite, no AI
-assistants, no VMs), plain ext4 + swap partition via GRUB/BIOS boot —
-no LUKS/btrfs, too slow for it on this CPU.
+Modules are grouped by category under `modules/osa/`:
 
-### pi-backup
+| Category      | Contents                                    |
+|----------------|----------------------------------------------|
+| `ai/`          | AI coding assistants (claude-code, opencode) |
+| `apps/`        | misc applications                            |
+| `browser/`     | firefox, librewolf, zen-browser, tor         |
+| `de/`          | desktop environments (niri, hyprland, xfce, caelestia) + their shells (dms) |
+| `dev/`         | LSP and MCP server definitions               |
+| `editor/`      | nixvim, vim, zed                             |
+| `fileManager/` | nautilus                                     |
+| `media/`       | audio/video apps                             |
+| `network/`     | yggdrasil                                    |
+| `office/`      | libreoffice                                  |
+| `shell/`       | CLI utilities (fish, zsh, eza, fzf, ripgrep, ...) |
+| `system/`      | system-level settings (audio, polkit, sddm, branding, ...) |
+| `terminal/`    | wezterm                                      |
 
-Raspberry Pi 3B (aarch64), headless backup server — SD-card image, plain
-ext4, zram swap, a trimmed vendor kernel (no sound/media/BT), and a
-hardware watchdog + capped journald for unattended operation.
+Every module is a `delib.module` (see denix), namespaced as
+`myconfig.osa.<category>.<name>`. A module that needs its own flake input
+declares it in a sibling `inputs.nix` (e.g.
+`modules/osa/de/dms/inputs.nix`) rather than in the root flake — see
+`lib/flake-inputs.nix`, which scans for these and feeds them into
+`flake-file.nix`.
 
-## Offline installer images
-
-Any host+rice combination that's disko-partitioned and boots from an ISO
-(x86_64/i686 — not pi-backup's aarch64 SD-card image) automatically gets
-a matching offline installer, built once in `lib/installer.nix`. List
-them with `nix flake show` under `packages.x86_64-linux` (e.g.
-`eeepc-installer`, `nixlaptop-niri-installer`).
-
-```bash
-nix build .#eeepc-installer
-sudo dd if=result/iso/nixos-minimal-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
-```
-
-Boot the target machine from that USB stick and run:
-
-```bash
-osa-install /dev/sda   # the exact device the image was built for
-```
-
-It partitions, formats, and installs the exact target the ISO was built
-for — fully offline, no network needed. Unlike `disko-install`, it does
-not re-evaluate the flake on the install target; it runs the toplevel
-and disko script that were already built when the ISO was made, which
-matters on weak hardware like eeepc.
-
-For a manual install instead (e.g. to pick a different disk or tweak
-config first), boot any NixOS installer, clone this repo, then:
+`flake.nix` is generated from `flake-file.nix` via
+[flake-file](https://github.com/vic/flake-file) — never edit it by hand.
+After touching `flake-file.nix` or any `inputs.nix`, run:
 
 ```bash
-sudo nix run github:nix-community/disko -- --mode disko --flake .#<host>
-sudo nixos-install --flake .#<host> --root /mnt
+nix run .#write-flake
 ```
 
-## Raspberry Pi SD card image (pi-backup)
+`nix flake check` fails if `flake.nix` is out of sync.
 
-pi-backup isn't disko-partitioned (see above), so it doesn't get an
-offline installer — it builds straight to a flashable SD card image via
-nixpkgs' own `sd-image-aarch64.nix`:
+## Using OSA in your own configuration
 
-```bash
-nix build .#nixosConfigurations.pi-backup.config.system.build.sdImage
+Add it as a flake input:
+
+```nix
+inputs.osa.url = "github:krozzzis/osa";
 ```
 
-This cross-compiles (see `hosts/pi-backup/default.nix` for why) rather
-than emulating aarch64, but still expect a long first build — the kernel
-and everything above it builds from source. Output is a zstd-compressed
-image at `result/sd-image/*.img.zst`; decompress on the fly straight onto
-the card (`/dev/sdX`, not a partition):
+Then feed `${inputs.osa}/modules` into denix's module scan alongside your
+own module/host directories. A minimal flake putting this together:
 
-```bash
-zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdX bs=4M status=progress oflag=sync
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    denix = {
+      url = "github:yunfachi/denix";
+      inputs = { nixpkgs.follows = "nixpkgs"; home-manager.follows = "home-manager"; };
+    };
+    osa.url = "github:krozzzis/osa";
+  };
+
+  outputs = { denix, osa, ... }@inputs: {
+    nixosConfigurations = denix.lib.configurations {
+      moduleSystem = "nixos";
+      homeManagerUser = "<your-username>";
+      paths = [
+        ./hosts
+        "${osa}/modules"
+      ];
+      specialArgs = { inherit inputs; };
+    };
+  };
+}
 ```
 
-Login is authorized-key-only (baked into the image at build time, see
-`hosts/pi-backup/default.nix`) with no password set at all, so there's
-nothing to stage on the card by hand before first boot. Boot it, find its
-DHCP lease, `ssh krozzzis@<ip>`.
+From there, a host under `./hosts/<name>/default.nix` turns modules on
+via `myconfig.osa.<category>.<name>.enable = true;`. See
+[osa-krozzzis](https://github.com/krozzzis/osa-krozzzis) for a real
+identity/rice layer built this way, and its README for how to wire user
+profiles and rices on top of `osa` modules, or `AGENTS.md` in this repo
+for the full module-authoring reference (how `delib.module`,
+`nixos.ifEnabled`/`home.ifEnabled`, and cross-module options work).
+
+Each module's own `inputs.nix` (if any) is picked up automatically by the
+same `lib/flake-inputs.nix` scanning mechanism — nothing needs to be
+hand-declared in your root flake for a module you didn't write yourself.
