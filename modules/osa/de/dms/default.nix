@@ -27,6 +27,12 @@ delib.module {
     # Letting the greeter manage the handoff itself removes that gap.
     services.greetd.greeterManagesPlymouth = true;
 
+    # Serves the user's face icon (~/.face) to the greeter over D-Bus.
+    # The greeter runs as an unprivileged user and cannot read ~/.face
+    # inside the 0700 home, so AccountsService (running as root) is what
+    # makes the avatar show on the dms login/lock screen.
+    services.accounts-daemon.enable = true;
+
     services.upower.enable = true;
 
     environment.systemPackages = with pkgs; [
