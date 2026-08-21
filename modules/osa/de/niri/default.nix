@@ -12,6 +12,11 @@ delib.module {
 
   nixos.always.imports = [ inputs.niri-pkgs.nixosModules.niri ];
 
+  # The home-manager niri module is what provides `config.lib.niri.actions`,
+  # which the dms greeter's niri integration (inputs.dms.homeModules.niri)
+  # depends on. Without it the entire home configuration fails to evaluate.
+  home.always.imports = [ inputs.niri-pkgs.homeModules.niri ];
+
   nixos.ifEnabled = {
     programs.niri.enable = true;
     # niri-unstable still hard-requires libdisplay-info 0.2 (its Rust
@@ -93,6 +98,10 @@ delib.module {
       wtype
     ];
 
+  };
+
+  home.ifEnabled = {
+    programs.niri.enable = true;
   };
 
 }
