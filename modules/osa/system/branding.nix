@@ -79,6 +79,15 @@ delib.module {
         BUG_REPORT_URL = cfg.bugReportUrl;
       };
 
+      # /etc/os-release automatically gets ID_LIKE=nixos added by NixOS
+      # itself when distroId != "nixos" (see the distroId description
+      # above), but the same generator has no equivalent for
+      # /etc/lsb-release, so it has to be added by hand here to keep
+      # distro-detection scripts that only check lsb-release working too.
+      system.nixos.extraLSBReleaseArgs = lib.optionalAttrs (cfg.distroId != "nixos") {
+        DISTRIB_ID_LIKE = "nixos";
+      };
+
       environment.etc."issue".text = "${cfg.distroName} \\n \\l\n\n";
 
       boot.plymouth.theme = lib.mkDefault cfg.plymouth.theme;
