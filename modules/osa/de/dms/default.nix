@@ -8,11 +8,6 @@ delib.module {
     inputs.dms.homeModules.dank-material-shell
     inputs.dms-plugin-registry.nixosModules.default
     inputs.dms.homeModules.niri
-    # dms's niri integration (inputs.dms.homeModules.niri) references
-    # `config.lib.niri.actions`, which is provided by the niri-flake
-    # home-manager module. Without it the entire home configuration fails
-    # to evaluate.
-    inputs.niri-pkgs.homeModules.niri
   ];
   nixos.always.imports = [ inputs.dms.nixosModules.dank-material-shell ];
 
