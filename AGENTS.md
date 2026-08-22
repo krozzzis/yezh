@@ -1,6 +1,13 @@
 # Проект OSA — Описание для агентов
 
-**OSA** — NixOS конфигурация. Основана на [denix](https://github.com/yunfachi/denix) — модульной системе поверх NixOS + home-manager.
+**OSA** — переиспользуемая библиотека denix-модулей для NixOS + home-manager.
+Это НЕ конфигурация машины: здесь нет `hosts/`, `rices/`, пользователя и
+`nixosConfigurations`. Всё персональное/машинное живёт в даунстрим-флейках:
+
+```
+osa (этот репо)  →  osa-krozzzis (~/osa-user)  →  osa-host (~/osa-host)
+модули + интерфейс   личность, rices, дотфайлы    реальные машины
+```
 
 ---
 
@@ -8,185 +15,128 @@
 
 ```
 flake.nix        ← СГЕНЕРИРОВАННЫЙ файл (github:vic/flake-file), не редактировать руками
-flake-file.nix   ← реальная точка входа: outputs (denix) + базовые inputs
-├── hosts/       ← конфигурации машин
-│   ├── inputs.nix   ← flake inputs, общие для всех хостов (disko, nixos-hardware)
-│   └── nixlaptop/
-├── modules/     ← переиспользуемые модули
-│   ├── config/  ← системные мета-опции (desktop/server/gui/shell/dev)
-│   ├── shell/   ← shell утилиты (все включаются при shell.enable)
-│   ├── de/      ← Desktop Environments (niri, hyprland, xfce)
-│   │   └── dms/inputs.nix, niri/inputs.nix, ...  ← flake inputs конкретного модуля
-│   ├── editor/  ← редакторы (nixvim, vim, zed)
-│   ├── browser/ ← браузеры
-│   ├── apps/    ← приложения
-│   ├── media/   ← медиа
-│   ├── ai/      ← AI инструменты (opencode)
-│   ├── dev/     ← LSP и MCP серверы
-│   ├── fileManager/
-│   ├── network/
-│   ├── office/
-│   ├── system/  ← системные настройки
-│   ├── terminal/
-│   └── user/    ← шрифты, раскладки
-├── rices/       ← пресеты DE (rice = desktop environment preset)
-├── lib/
-│   └── flake-inputs.nix  ← собирает все inputs.nix для flake-file
-├── flake.lock
-├── AGENTS.md
-└── README.md
+flake-file.nix   ← реальная точка входа: outputs + базовые inputs
+modules/osa/     ← все модули, сгруппированы по категориям
+│   ├── ai/         AI-инструменты (claude-code, opencode)
+│   ├── apps/       приложения
+│   ├── browser/    браузеры
+│   ├── de/         десктоп-окружения (niri, hyprland, xfce, caelestia) + dms
+│   ├── dev/        LSP- и MCP-серверы (пишут в user.dev.lsp / user.dev.mcp)
+│   ├── editor/     редакторы (nixvim, vim, zed)
+│   ├── fileManager/, media/, network/, office/, terminal/
+│   ├── shell/      CLI-утилиты (включаются при user.shell.enable)
+│   ├── system/     системные настройки (audio, polkit, sddm, ...)
+│   └── user/       ★ интерфейсный контракт user.* (только опции, см. ниже)
+├── check/default.nix ← фейковый хост для полного eval-а всех модулей
+└── lib/flake-inputs.nix ← сканер inputs.nix-файлов
 ```
 
----
+## flake-file механика
 
-## flake.nix / flake-file.nix (как всё собирается)
+`flake.nix` генерируется из `flake-file.nix` через
+[flake-file](https://github.com/vic/flake-file). Любой flake input
+объявляется в файле `inputs.nix` рядом с модулем, который его использует
+(пример: `modules/osa/de/dms/inputs.nix`). `lib/flake-inputs.nix`
+сканирует эти файлы и подмешивает их во flake.
 
-`flake.nix` больше не редактируется руками — это сгенерированный
-[flake-file](https://github.com/vic/flake-file) shim (`evalModules` +
-`inputs.flake-file.flakeModules.flake` + `./flake-file.nix`). Реальный
-`outputs` и базовый набор inputs (`nixpkgs`, `home-manager`, `denix`,
-`flake-file`) живут в `flake-file.nix`.
+После добавления/изменения любого `inputs.nix` или `flake-file.nix`:
 
-Любой другой flake input объявляется рядом с модулем, который его
-использует, в файле `inputs.nix` (см. `lib/flake-inputs.nix`,
-`modules/osa/de/dms/inputs.nix` как пример) — не в корневом flake.nix.
-После добавления/изменения `inputs.nix` выполни `nix run .#write-flake`,
-чтобы перегенерировать `flake.nix` (или запусти `nix flake check` —
-`checks.flake-file-in-sync` упадёт, если файл рассинхронизирован).
+```bash
+nix run .#write-flake
+```
 
-- **Модульная система**: `denix` — он проходит по `./hosts`, `./modules`, `./rices`, собирает `nixosConfigurations` и `homeConfigurations`. `inputs.nix`-файлы в этих директориях явно исключены из denix-скана (`exclude` в `flake-file.nix`) — их видит только flake-file.
-- **Extensions**: `args` (проброс `cfg` в модули) + `base.withConfig` (включает `myconfig`).
-- **Пользователь**: `krozzzis`.
-- **specialArgs**: пробрасываются `inputs` (все флейки).
+`nix flake check` упадёт (`flake-file-in-sync`), если `flake.nix`
+рассинхронизирован. Базовые inputs (`nixpkgs`, `home-manager`, `denix`,
+`flake-file`) объявлены прямо в `flake-file.nix`.
 
-Конфигурация собирается из трёх директорий. Порядок применения: hosts → modules → rices.
+## Интерфейсный контракт `user.*`
 
----
+`modules/osa/user/default.nix` объявляет опции, которые читают модули osa.
+Даунстрим (osa-user/хосты) **только проставляет значения**, ничего не
+объявляет:
 
-## hosts/ — машины
+| Опция | Тип | Default | Кто заполняет |
+|---|---|---|---|
+| `user.constants.username` | str | **нет — обязателен** | osa-user |
+| `user.constants.useremail` | str | **нет — обязателен** | osa-user |
+| `user.gui.enable` | bool | `false` | osa-user (rice/desktop-профиль) |
+| `user.shell.enable` | bool | `false` | osa-user |
+| `user.shell.default` | nullOr attrs | `null` | хост: `{ pkg = myconfig.osa.shell.fish.pkg; }` |
+| `user.editor.default` | attrs | `{ pkg = myconfig.osa.editor.vim.pkg; }` | опционально |
+| `user.dev.lsp.<name>` | attrsOf submodule | `{}` | модули `osa.dev.lsp.*` |
+| `user.dev.mcp.<name>` | attrsOf submodule | `{}` | модули `osa.dev.mcp.*` |
+| `user.gui.fonts.nerdfonts` | bool | `false` | osa-user |
 
-В `hosts/nixlaptop/` лежат файлы конкретной машины:
-- **`default.nix`** — главная конфигурация: выбирает rice (`niri`), включает dev/desktop, устанавливает дефолтные приложения, настройки питания, Bluetooth, часовой пояс.
-- **`boot.nix`** — systemd-boot, Plymouth, silent boot.
-- **`disko.nix`** — разметка диска: GPT → ESP (FAT32) + LUKS → btrfs (subvolumes: @, @home, @nix, @log, @snapshots, @swap).
-- **`hardware.nix`** — AMD CPU, NVMe, kvm-amd.
-- **`network.nix`** — hostname `nixlaptop`, NetworkManager.
+«attrs» для default-app — attrset c полем `.pkg`; бинарник получают как
+`app.pkg.meta.mainProgram or (lib.getName app.pkg)`.
 
----
+При добавлении в любой модуль чтения новой опции `myconfig.user.*` —
+сначала объяви её в `modules/osa/user/default.nix`.
 
-## rices/ — пресеты DE
-
-Каждый rice — это `delib.rice`, который включает группу модулей для конкретного DE: `niri` (niri + DMS + Walker), `hyprland` (Hyprland + polkit + SDDM), `xfce`. В хосте выбирается полем `rice = "niri";`.
-
----
-
-## modules/ — категории модулей
-
-Все модули используют `delib.module { name = "категория.подкатегория"; }`.
-
-Доступ к опциям других модулей — через `myconfig.категория.подкатегория.опция`.
-
----
-
-## Как создать новый модуль
-
-1. Создайте файл `modules/<category>/<name>.nix`.
-2. Используйте шаблон:
+## Как устроен модуль
 
 ```nix
 { delib, lib, pkgs, ... }:
 delib.module {
-  name = "категория.имя";
+  name = "osa.категория.имя";
 
   options = { myconfig, ... }: {
-    категория.имя.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = myconfig.gui.enable;  # или false, или myconfig.shell.enable
-    };
+    osa.категория.имя.enable = delib.boolOption myconfig.user.gui.enable;
+    # многие модули также выставляют .pkg:
+    osa.категория.имя.pkg = delib.packageOption pkgs.имя;
   };
 
   nixos.ifEnabled = { ... }: { /* NixOS config */ };
   home.ifEnabled = { ... }: { /* home-manager config */ };
-  myconfig.ifEnabled = { ... }: { /* влияет на другие myconfig-опции */ };
-};
+  myconfig.ifEnabled = { ... }: { /* запись в чужие myconfig-опции */ };
+}
 ```
 
-3. Если модулю нужен flake input — создай (или дополни) `inputs.nix` рядом с модулем:
-   ```nix
-   { ... }:
-   {
-     flake-file.inputs.<name> = {
-       url = "github:...";
-       inputs.nixpkgs.follows = "nixpkgs";
-     };
-   }
-   ```
-   Затем `nix run .#write-flake`, чтобы перегенерировать `flake.nix`. В самом модуле input доступен как обычно, через `inputs.<name>`.
-4. Если модуль не требует опций включения — используй `delib.singleEnableOption true/false`.
-5. Включи модуль в хосте через `myconfig.категория.имя.enable = true;`.
+- Пространство имён опций: `myconfig.osa.<категория>.<имя>`.
+- Если включение не нужно — `options = delib.singleEnableOption false;`.
+- Жизненные циклы: `nixos/home/myconfig` × `.always` / `.ifEnabled` /
+  `.ifDisabled`. Модули без enable-опции (как LSP/MCP-регистраторы с
+  именем `user.dev`) используют только `.always`.
+- Доступ к чужим опциям — через `myconfig.osa....`; свой cfg — через аргумент `cfg`.
 
-### Жизненные циклы конфигурации
+### Flake input модулю
 
-- `nixos.always` — всегда применяется к NixOS (даже если модуль выключен)
-- `nixos.ifEnabled` — применяется к NixOS только если модуль включён
-- `home.always` — всегда применяется к home-manager
-- `home.ifEnabled` — применяется к home-manager только если модуль включён
-- `myconfig.ifEnabled` — влияет на другие myconfig-опции (прокидывает enable в другие модули)
-
-### Доступ к опциям других модулей
+Создай/дополни `inputs.nix` рядом с модулем:
 
 ```nix
-{ myconfig, ... }: {
-  myconfig.ifEnabled = {
-    other.module.enable = true;  # включить другой модуль
-  };
-
-  home.ifEnabled = {
-    home.packages = [ myconfig.other.module.pkg ];  # использовать pkg из другого модуля
+{ ... }:
+{
+  flake-file.inputs.<name> = {
+    url = "github:...";
+    inputs.nixpkgs.follows = "nixpkgs";
   };
 }
 ```
 
-### Специальные атрибуты
+Затем `nix run .#write-flake`. В модуле input доступен через `inputs.<name>`.
 
-- `myconfig` — все опции всех модулей (доступны из любого модуля)
-- `cfg` — опции текущего модуля (если включено `args` extension в flake.nix)
-- `inputs` — все flake inputs
-- `host` — информация о хосте
-- `pkgs` — nixpkgs
-
----
-
-## Как создать новый хост
-
-1. Создай `hosts/<name>/default.nix` с `delib.host { name = "<name>"; }`.
-2. Укажи `rice = "<name>";` для выбора DE.
-3. Настрой нужные модули через `myconfig.*`.
-4. Ничего добавлять в `flake.nix`/`flake-file.nix` не нужно — denix сканирует `./hosts` целиком и подхватит новую директорию автоматически. Если хосту нужен свой flake input — `hosts/<name>/inputs.nix`, как в "Как создать новый модуль".
-
-## Как создать новый rice
-
-1. Создай `rices/<name>.nix` с `delib.rice { name = "<name>"; }`.
-2. Включи нужные DE/модули через `myconfig.*`.
-3. В хосте укажи `rice = "<name>";`.
-
----
-
-## Команды
+## Проверки
 
 ```bash
-# Сборка и переключение
-sudo nixos-rebuild switch --flake .#nixlaptop
-
-# Только home-manager
-home-manager switch --flake .#nixlaptop
-
-# Очистка старых поколений
-./clear.sh
-
-# Перегенерировать flake.nix после правки flake-file.nix/inputs.nix
-nix run .#write-flake
-
-# Проверить, что flake.nix не рассинхронизирован (среди прочего)
+# Полный eval всех модулей (gui+shell профиль, niri+dms+walker, fish)
+# через фейковый хост check/default.nix + сборка toplevel-деривации:
 nix flake check
+
+# Перегенерировать flake.nix после правки inputs.nix/flake-file.nix
+nix run .#write-flake
 ```
+
+`check/` виден только внутри этого флейка — даунстрим сканирует только
+`${osa}/modules`. Реальную сборку машин проверяем в `~/osa-host`:
+
+```bash
+cd ~/osa-host
+nix eval .#nixosConfigurations.nixlaptop.config.system.build.toplevel.drvPath \
+  --override-input osa ~/osa --override-input osa-user ~/osa-user
+```
+
+## Как добавить модуль
+
+1. `modules/osa/<category>/<name>.nix` по шаблону выше.
+2. Нужен input — `inputs.nix` рядом + `nix run .#write-flake`.
+3. Проверь: `nix flake check`.

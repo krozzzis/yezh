@@ -93,13 +93,40 @@ own module/host directories. A minimal flake putting this together:
 ```
 
 From there, a host under `./hosts/<name>/default.nix` turns modules on
-via `myconfig.osa.<category>.<name>.enable = true;`. See
-[osa-krozzzis](https://github.com/krozzzis/osa-krozzzis) for a real
+via `myconfig.osa.<category>.<name>.enable = true;`.
+
+### Required `user.*` contract
+
+All osa modules read their user-facing knobs from the `user.*` option tree,
+declared in [`modules/osa/user/default.nix`](modules/osa/user/default.nix).
+Downstream flakes only *set* these options, they never declare them.
+Two are mandatory and have no default:
+
+```nix
+user.constants.username = "<your-login>";
+user.constants.useremail = "<your-email>";
+```
+
+Everything else (`user.gui.enable`, `user.shell.*`, `user.dev.*`, ...)
+defaults to off/null, so a headless server can ignore it entirely. See
+the table in `AGENTS.md` for the full contract.
+
+### Module flake inputs
+
+Some modules need their own flake inputs (niri, dms, walker, nixvim, ...);
+each declares them in a sibling `inputs.nix` inside `${osa}/modules`. Your
+flake should collect those too, using the same scanner osa itself uses
+(`lib/flake-inputs.nix`) — see how [osa-host](https://github.com/krozzzis/osa-host)
+does it: filter each input root once (dropping `inputs.nix` files so denix
+never imports them), then pass every collected input through to denix via
+`specialArgs.inputs`.
+
+See [osa-krozzzis](https://github.com/krozzzis/osa-krozzzis) for a real
 identity/rice layer built this way, and its README for how to wire user
 profiles and rices on top of `osa` modules, or `AGENTS.md` in this repo
 for the full module-authoring reference (how `delib.module`,
 `nixos.ifEnabled`/`home.ifEnabled`, and cross-module options work).
 
-Each module's own `inputs.nix` (if any) is picked up automatically by the
-same `lib/flake-inputs.nix` scanning mechanism — nothing needs to be
-hand-declared in your root flake for a module you didn't write yourself.
+Within osa itself, each module's `inputs.nix` is picked up automatically by
+`lib/flake-inputs.nix`; downstream flakes need to run the same scan over
+`${osa}/modules` (see the previous section) for those inputs to reach them.
