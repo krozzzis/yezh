@@ -35,6 +35,31 @@ in
         checks = (base.checks or { }) // {
           ''${system} = (base.checks.''${system} or { }) // {
             flake-file-in-sync = evaluated.config.flake-file.check-flake-file pkgs;
+
+            # Fully evaluate every osa module against the `user.*` interface
+            # contract via a mock host (./check/default.nix), forcing the
+            # whole NixOS + home-manager config tree -- no real machine
+            # needed, and downstream flakes don't see ./check at all.
+            modules-eval =
+              let
+                lib = inputs.nixpkgs.lib;
+                findInputsNix = import ./lib/flake-inputs.nix { inherit lib; };
+              in
+              (inputs.denix.lib.configurations {
+                moduleSystem = "nixos";
+                homeManagerUser = "nixos";
+                paths = [ ./modules ./check ];
+                exclude = findInputsNix.findPaths [ ./modules ./check ];
+                extensions =
+                  let
+                    dext = inputs.denix.lib.extensions;
+                  in
+                  [
+                    dext.args
+                    (dext.base.withConfig { args.enable = true; })
+                  ];
+                specialArgs = { inherit inputs; };
+              }).eval-check.config.system.build.toplevel;
           };
         };
       }
@@ -63,25 +88,6 @@ in
     };
 
     flake-file.url = "github:vic/flake-file";
-
-    # Not currently referenced by any module (niri-pkgs replaced niri; no
-    # module reaches for noctalia/nixGL directly) -- kept declared rather
-    # than silently dropped, since removing them wasn't part of this
-    # migration. Worth a follow-up: confirm still wanted, or delete.
-    niri = {
-      url = "github:sodiboo/niri-flake/very-refactor";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixGL = {
-      url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   # This flake is a module library, not a host builder -- hosts/ moved to

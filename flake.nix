@@ -30,6 +30,37 @@
       checks = (base.checks or { }) // {
         ${system} = (base.checks.${system} or { }) // {
           flake-file-in-sync = evaluated.config.flake-file.check-flake-file pkgs;
+
+          # Fully evaluate every osa module against the `user.*` interface
+          # contract via a mock host (./check/default.nix), forcing the
+          # whole NixOS + home-manager config tree -- no real machine
+          # needed, and downstream flakes don't see ./check at all.
+          modules-eval =
+            let
+              lib = inputs.nixpkgs.lib;
+              findInputsNix = import ./lib/flake-inputs.nix { inherit lib; };
+            in
+            (inputs.denix.lib.configurations {
+              moduleSystem = "nixos";
+              homeManagerUser = "nixos";
+              paths = [
+                ./modules
+                ./check
+              ];
+              exclude = findInputsNix.findPaths [
+                ./modules
+                ./check
+              ];
+              extensions =
+                let
+                  dext = inputs.denix.lib.extensions;
+                in
+                [
+                  dext.args
+                  (dext.base.withConfig { args.enable = true; })
+                ];
+              specialArgs = { inherit inputs; };
+            }).eval-check.config.system.build.toplevel;
         };
       };
     };
@@ -64,25 +95,13 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    niri = {
-      url = "github:sodiboo/niri-flake/very-refactor";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     niri-pkgs = {
       url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixGL = {
-      url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ntfsplus = {
