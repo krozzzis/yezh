@@ -20,6 +20,7 @@ delib.module {
         name: server:
         {
           type = server.type;
+          enabled = true;
         }
         // lib.optionalAttrs (server.command != null) {
           command = server.command;
@@ -43,10 +44,15 @@ delib.module {
       xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
         mcp = mcpServers;
         permission = {
+          read = "allow";
+          edit = "allow";
+          bash = "allow";
+          glob = "allow";
+          grep = "allow";
+          list = "allow";
           websearch = "allow";
           webfetch = "allow";
-          grep = "allow";
-          glob = "allow";
+          todowrite = "allow";
         };
       };
     };

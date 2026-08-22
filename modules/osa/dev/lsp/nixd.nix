@@ -1,6 +1,8 @@
 { delib, pkgs, ... }:
 delib.module {
-  name = "user.dev";
+  name = "osa.dev.lsp.nixd";
+
+  options = delib.singleEnableOption false;
 
   myconfig.ifEnabled = {
     user.dev.lsp."nixd" = {

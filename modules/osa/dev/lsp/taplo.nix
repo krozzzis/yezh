@@ -1,6 +1,8 @@
 { delib, pkgs, ... }:
 delib.module {
-  name = "user.dev";
+  name = "osa.dev.lsp.taplo";
+
+  options = delib.singleEnableOption false;
 
   myconfig.ifEnabled = {
     user.dev.lsp."taplo" = {

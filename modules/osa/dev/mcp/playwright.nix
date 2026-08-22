@@ -1,6 +1,8 @@
 { delib, pkgs, ... }:
 delib.module {
-  name = "user.dev";
+  name = "osa.dev.mcp.playwright";
+
+  options = delib.singleEnableOption false;
 
   myconfig.ifEnabled = {
     user.dev.mcp."playwright" = {

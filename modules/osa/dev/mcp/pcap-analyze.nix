@@ -12,7 +12,9 @@ let
   '';
 in
 delib.module {
-  name = "user.dev";
+  name = "osa.dev.mcp.pcap-analyze";
+
+  options = delib.singleEnableOption false;
 
   myconfig.ifEnabled = {
     user.dev.mcp."pcap-analyze" = {

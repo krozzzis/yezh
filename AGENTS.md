@@ -21,7 +21,7 @@ modules/osa/     ← все модули, сгруппированы по кат
 │   ├── apps/       приложения
 │   ├── browser/    браузеры
 │   ├── de/         десктоп-окружения (niri, hyprland, xfce, caelestia) + dms
-│   ├── dev/        LSP- и MCP-серверы (пишут в user.dev.lsp / user.dev.mcp)
+│   ├── dev/         LSP- и MCP-серверы (opt-in, пишут в user.dev.lsp / user.dev.mcp)
 │   ├── editor/     редакторы (nixvim, vim, zed)
 │   ├── fileManager/, media/, network/, office/, terminal/
 │   ├── shell/      CLI-утилиты (включаются при user.shell.enable)
@@ -95,8 +95,9 @@ delib.module {
 - Пространство имён опций: `myconfig.osa.<категория>.<имя>`.
 - Если включение не нужно — `options = delib.singleEnableOption false;`.
 - Жизненные циклы: `nixos/home/myconfig` × `.always` / `.ifEnabled` /
-  `.ifDisabled`. Модули без enable-опции (как LSP/MCP-регистраторы с
-  именем `user.dev`) используют только `.always`.
+  `.ifDisabled`. Модули `osa.dev.*` — opt-in: у каждого своя опция
+  `osa.dev.<категория>.<имя>.enable` (default `false`); при включении
+  модуль сам регистрирует сервер в `user.dev.lsp/mcp` и ставит пакет.
 - Доступ к чужим опциям — через `myconfig.osa....`; свой cfg — через аргумент `cfg`.
 
 ### Flake input модулю

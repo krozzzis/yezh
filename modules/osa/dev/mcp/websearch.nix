@@ -1,6 +1,8 @@
-{ delib, pkgs, ... }:
+{ delib, ... }:
 delib.module {
-  name = "user.dev";
+  name = "osa.dev.mcp.websearch";
+
+  options = delib.singleEnableOption false;
 
   myconfig.ifEnabled = {
     user.dev.mcp."websearch" = {
@@ -8,9 +10,5 @@ delib.module {
       type = "remote";
       url = "https://mcp.exa.ai/mcp";
     };
-  };
-
-  home.ifEnabled = {
-    home.packages = [ ];
   };
 }
