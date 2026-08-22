@@ -44,13 +44,18 @@ delib.module {
         # ourselves stdio that's always valid, independent of the caller.
         exec </dev/null >/dev/null 2>&1
         ${xhost}/bin/xhost +si:localuser:root
+        # Revoke root's X access as soon as this script exits -- the grant
+        # is only needed for the duration of the elevated launch. That
+        # rules out `exec` here (an EXIT trap never fires across exec),
+        # so run pkexec as a child and propagate its status explicitly.
+        trap '${xhost}/bin/xhost -si:localuser:root >/dev/null 2>&1 || true' EXIT
         # Absolute path, not bare `env`: this system's uutils-coreutils is
         # hiPrio'd ahead of GNU coreutils on $PATH, and pkexec resolves
         # PROGRAM through its own restricted lookup, which landed on
         # uutils' multicall binary and choked on DISPLAY=:0 as if it were
         # an applet name ("coreutils: unknown program"). Bypass all of
         # that by baking in the real GNU coreutils env directly.
-        exec pkexec "${coreutils}/bin/env" DISPLAY="$DISPLAY" "${gparted}/bin/gparted" "$@"
+        pkexec "${coreutils}/bin/env" DISPLAY="$DISPLAY" "${gparted}/bin/gparted" "$@"
       '')
       # gparted's own .desktop file `Exec`s the raw (non-elevated)
       # binary directly, which is useless here since it needs pkexec.
@@ -63,7 +68,11 @@ delib.module {
         comment = "Create, reorganize, and delete partitions";
         icon = "${gparted}/share/icons/hicolor/scalable/apps/gparted.svg";
         exec = "gparted";
-        categories = [ "GNOME" "System" "Filesystem" ];
+        categories = [
+          "GNOME"
+          "System"
+          "Filesystem"
+        ];
         terminal = false;
       })
     ];
