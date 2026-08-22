@@ -1,4 +1,9 @@
-{ delib, pkgs, lib, ... }:
+{
+  delib,
+  pkgs,
+  lib,
+  ...
+}:
 let
   mcpPcapAnalyze = pkgs.writeShellScriptBin "mcp-pcap-analyze" ''
     export UV_PYTHON_PREFERENCE=only-system
@@ -18,6 +23,9 @@ delib.module {
   };
 
   home.ifEnabled = {
-    home.packages = [ pkgs.uv mcpPcapAnalyze ];
+    home.packages = [
+      pkgs.uv
+      mcpPcapAnalyze
+    ];
   };
 }

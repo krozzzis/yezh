@@ -1,10 +1,18 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.shell.zsh";
 
   options = { myconfig, ... }: {
-    osa.shell.zsh.enable = delib.boolOption (myconfig.user.shell.enable && myconfig.user.shell.default != null
-        && lib.getName myconfig.osa.shell.zsh.pkg == lib.getName myconfig.user.shell.default.pkg);
+    osa.shell.zsh.enable = delib.boolOption (
+      myconfig.user.shell.enable
+      && myconfig.user.shell.default != null
+      && lib.getName myconfig.osa.shell.zsh.pkg == lib.getName myconfig.user.shell.default.pkg
+    );
     osa.shell.zsh.pkg = delib.packageOption pkgs.zsh;
   };
 
@@ -35,10 +43,12 @@ delib.module {
     programs.fzf.enableZshIntegration = myconfig.osa.shell.fzf.enable;
   };
 
-  nixos.ifEnabled = { myconfig, ... }: let
-    inherit (myconfig.user.constants) username;
-  in {
-    programs.zsh.enable = true;
-  };
+  nixos.ifEnabled =
+    { myconfig, ... }:
+    let
+      inherit (myconfig.user.constants) username;
+    in
+    {
+      programs.zsh.enable = true;
+    };
 }
-

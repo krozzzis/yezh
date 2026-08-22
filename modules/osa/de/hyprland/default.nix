@@ -1,4 +1,9 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.de.hyprland";
 
@@ -6,7 +11,9 @@ delib.module {
     osa.de.hyprland.enable = delib.boolOption false;
     osa.de.hyprland.launcher.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = pkgs.walker; };
+      default = {
+        pkg = pkgs.walker;
+      };
     };
   };
 

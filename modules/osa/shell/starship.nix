@@ -7,13 +7,14 @@ delib.module {
     osa.shell.starship.useNerdFonts = delib.description (delib.boolOption true) "Enable Nerd Font icons for modules";
   };
 
-  myconfig.ifEnabled = { myconfig, ... }:
-  let
-    cfg = myconfig.osa.shell.starship;
-  in
-  lib.mkIf cfg.useNerdFonts {
-    user.gui.fonts.nerdfonts = true;
-  };
+  myconfig.ifEnabled =
+    { myconfig, ... }:
+    let
+      cfg = myconfig.osa.shell.starship;
+    in
+    lib.mkIf cfg.useNerdFonts {
+      user.gui.fonts.nerdfonts = true;
+    };
 
   # Prompt format/theme is personal taste -- see modules/dotfiles/starship.nix
   # in the osa-user flake, which extends this same module by name.

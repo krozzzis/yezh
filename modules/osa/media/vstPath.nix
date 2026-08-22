@@ -1,12 +1,18 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.media.vstPath";
 
   options = { myconfig, ... }: {
     osa.media.vstPath.enable = delib.boolOption false;
 
-    osa.media.vstPath.plugins = delib.description (delib.listOfOption lib.types.package [ ])
-      "Plugin packs (LV2/VST2/VST3/CLAP/LADSPA/DSSI) to install and expose to every plugin host via *_PATH env vars";
+    osa.media.vstPath.plugins =
+      delib.description (delib.listOfOption lib.types.package [ ])
+        "Plugin packs (LV2/VST2/VST3/CLAP/LADSPA/DSSI) to install and expose to every plugin host via *_PATH env vars";
   };
 
   nixos.ifEnabled =

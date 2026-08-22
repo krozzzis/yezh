@@ -1,4 +1,10 @@
-{ delib, lib, pkgs, inputs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 delib.module {
   name = "osa.ai.claude-code";
 
@@ -6,7 +12,8 @@ delib.module {
     osa.ai.claude-code.enable = delib.boolOption myconfig.user.gui.enable;
   };
 
-  home.ifEnabled = { myconfig, ... }:
+  home.ifEnabled =
+    { myconfig, ... }:
     let
       claudeBin = lib.getExe pkgs.claude-code;
       hm = inputs.home-manager.lib.hm;
@@ -14,7 +21,8 @@ delib.module {
       enabledLsp = lib.filterAttrs (_name: srv: srv.enable && srv.package != null) myconfig.user.dev.lsp;
       enabledMcp = lib.filterAttrs (_name: srv: srv.enable) myconfig.user.dev.mcp;
 
-      mkMcpAdd = name: server:
+      mkMcpAdd =
+        name: server:
         if server.type == "local" then
           ''
             ${claudeBin} mcp remove --scope user ${name} >/dev/null 2>&1 || true
@@ -29,9 +37,12 @@ delib.module {
       mcpAddCommands = lib.mapAttrsToList mkMcpAdd enabledMcp;
     in
     {
-      home.packages = with pkgs; [
-        claude-code
-      ] ++ lib.mapAttrsToList (_name: srv: srv.package) enabledLsp;
+      home.packages =
+        with pkgs;
+        [
+          claude-code
+        ]
+        ++ lib.mapAttrsToList (_name: srv: srv.package) enabledLsp;
 
       home.activation.claudeCodeMcp = hm.dag.entryAfter [ "writeBoundary" ] (
         lib.concatStringsSep "\n" mcpAddCommands

@@ -1,4 +1,10 @@
-{ delib, lib, inputs, pkgs, ... }:
+{
+  delib,
+  lib,
+  inputs,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.editor.nixvim";
 

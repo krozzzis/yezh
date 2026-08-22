@@ -1,4 +1,9 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.media.reaper";
 
@@ -19,21 +24,23 @@ delib.module {
 
   nixos.ifEnabled = { cfg, ... }: {
     services.pipewire.extraConfig.jack."10-reaper" = {
-      "jack.rules" = [{
-        matches = [
-          { "client.name" = "REAPER"; }
-          { "application.process.binary" = "reaper"; }
-        ];
-        actions = {
-          "update-props" = {
-            "node.latency" = "${toString cfg.quantum}/${toString cfg.rate}";
-            "node.rate" = "1/${toString cfg.rate}";
-            "node.quantum" = "${toString cfg.quantum}/${toString cfg.rate}";
-            "node.lock-quantum" = true;
-            "node.force-quantum" = cfg.quantum;
+      "jack.rules" = [
+        {
+          matches = [
+            { "client.name" = "REAPER"; }
+            { "application.process.binary" = "reaper"; }
+          ];
+          actions = {
+            "update-props" = {
+              "node.latency" = "${toString cfg.quantum}/${toString cfg.rate}";
+              "node.rate" = "1/${toString cfg.rate}";
+              "node.quantum" = "${toString cfg.quantum}/${toString cfg.rate}";
+              "node.lock-quantum" = true;
+              "node.force-quantum" = cfg.quantum;
+            };
           };
-        };
-      }];
+        }
+      ];
     };
   };
 }

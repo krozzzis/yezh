@@ -11,7 +11,9 @@
 rec {
   findPaths =
     dirs:
-    lib.filter (path: baseNameOf path == "inputs.nix") (lib.concatMap lib.filesystem.listFilesRecursive dirs);
+    lib.filter (path: baseNameOf path == "inputs.nix") (
+      lib.concatMap lib.filesystem.listFilesRecursive dirs
+    );
 
   importModules = dirs: map (path: import path) (findPaths dirs);
 }

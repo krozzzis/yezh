@@ -1,4 +1,9 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.editor.zed";
 
@@ -6,7 +11,8 @@ delib.module {
     osa.editor.zed.enable = delib.boolOption myconfig.user.gui.enable;
   };
 
-  home.ifEnabled = { myconfig, ... }:
+  home.ifEnabled =
+    { myconfig, ... }:
     let
       enabledServers = lib.filterAttrs (_name: srv: srv.enable) myconfig.user.dev.lsp;
 
@@ -21,10 +27,12 @@ delib.module {
         };
       };
 
-      lsp = builtins.listToAttrs (map (name: {
-        inherit name;
-        value = zedLspConfigs.${name} or { };
-      }) (builtins.attrNames enabledServers));
+      lsp = builtins.listToAttrs (
+        map (name: {
+          inherit name;
+          value = zedLspConfigs.${name} or { };
+        }) (builtins.attrNames enabledServers)
+      );
     in
     {
       home.packages = with pkgs; [
@@ -69,7 +77,10 @@ delib.module {
               formatter.external.command = "rustfmt";
             };
             Python = {
-              language_servers = [ "basedpyright" "ruff" ];
+              language_servers = [
+                "basedpyright"
+                "ruff"
+              ];
               formatter.external = {
                 command = "ruff";
                 arguments = [ "format" ];

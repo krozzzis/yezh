@@ -1,10 +1,18 @@
-{ delib, lib, pkgs, inputs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 delib.module {
   name = "osa.browser.zenBrowser";
 
   options = { myconfig, ... }: {
     osa.browser.zenBrowser.enable = delib.boolOption myconfig.user.gui.enable;
-    osa.browser.zenBrowser.pkg = delib.packageOption (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default);
+    osa.browser.zenBrowser.pkg = delib.packageOption (
+      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+    );
   };
 
   home.always.imports = [ inputs.zen-browser.homeModules.default ];
@@ -19,12 +27,16 @@ delib.module {
     programs.zen-browser = {
       enable = true;
 
-      policies = let
-          mkLockedAttrs = builtins.mapAttrs (_: value: {
-            Value = value;
-            Status = "locked";
-          });
-        in {
+      policies =
+        let
+          mkLockedAttrs = builtins.mapAttrs (
+            _: value: {
+              Value = value;
+              Status = "locked";
+            }
+          );
+        in
+        {
 
           Preferences = mkLockedAttrs {
             "widget.use-xdg-desktop-portal.file-picker" = 1;

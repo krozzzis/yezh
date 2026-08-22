@@ -33,16 +33,16 @@ delib.module {
       animations.enable = true;
 
       # -- Named workspaces
-      workspaces."1" = {};
-      workspaces."2" = {};
-      workspaces."3" = {};
-      workspaces."4" = {};
-      workspaces."5" = {};
-      workspaces."6" = {};
-      workspaces."7" = {};
-      workspaces."8" = {};
-      workspaces."9" = {};
-      workspaces."10" = {};
+      workspaces."1" = { };
+      workspaces."2" = { };
+      workspaces."3" = { };
+      workspaces."4" = { };
+      workspaces."5" = { };
+      workspaces."6" = { };
+      workspaces."7" = { };
+      workspaces."8" = { };
+      workspaces."9" = { };
+      workspaces."10" = { };
     };
   };
 }

@@ -1,4 +1,9 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.media.patchbay";
 
@@ -6,7 +11,8 @@ delib.module {
     osa.media.patchbay.enable = delib.boolOption false;
 
     osa.media.patchbay.plugins = delib.description (delib.listOfOption lib.types.package (
-      with pkgs; [
+      with pkgs;
+      [
         lsp-plugins
         calf
         x42-plugins
@@ -14,19 +20,27 @@ delib.module {
       ]
     )) "Plugin packs installed and put on VST_PATH/LV2_PATH/etc. via osa.media.vstPath";
 
-    osa.media.patchbay.carla.enable = delib.description (delib.boolOption true) "Carla — plugin host with its own patchbay, hosts VST2/VST3/LV2/CLAP";
+    osa.media.patchbay.carla.enable =
+      delib.description (delib.boolOption true) "Carla — plugin host with its own patchbay, hosts VST2/VST3/LV2/CLAP";
 
-    osa.media.patchbay.easyeffects.enable = delib.description (delib.boolOption true) "EasyEffects — GUI effect chains for the default sink/source";
-    osa.media.patchbay.easyeffects.autostart = delib.description (delib.boolOption true) "Run EasyEffects in background so its chains apply without the window open";
+    osa.media.patchbay.easyeffects.enable =
+      delib.description (delib.boolOption true) "EasyEffects — GUI effect chains for the default sink/source";
+    osa.media.patchbay.easyeffects.autostart =
+      delib.description (delib.boolOption true) "Run EasyEffects in background so its chains apply without the window open";
 
-    osa.media.patchbay.qpwgraph.autostart = delib.description (delib.boolOption true) "Start qpwgraph minimized to tray and re-apply the saved patchbay on login";
+    osa.media.patchbay.qpwgraph.autostart =
+      delib.description (delib.boolOption true) "Start qpwgraph minimized to tray and re-apply the saved patchbay on login";
 
-    osa.media.patchbay.yabridge.enable = delib.description (delib.boolOption false) "Bridge for Windows VST2/VST3 plugins (pulls in wine)";
+    osa.media.patchbay.yabridge.enable =
+      delib.description (delib.boolOption false) "Bridge for Windows VST2/VST3 plugins (pulls in wine)";
 
-    osa.media.patchbay.virtualSinks = delib.description (delib.attrsOfOption lib.types.str {
-      "fx-1" = "FX 1";
-      "fx-2" = "FX 2";
-    }) "Virtual sinks (node.name -> description) that individual apps can be moved onto for per-app processing";
+    osa.media.patchbay.virtualSinks =
+      delib.description
+        (delib.attrsOfOption lib.types.str {
+          "fx-1" = "FX 1";
+          "fx-2" = "FX 2";
+        })
+        "Virtual sinks (node.name -> description) that individual apps can be moved onto for per-app processing";
 
     osa.media.patchbay.virtualMic = delib.description (delib.strOption "Mic FX") "Description of the virtual capture device fed by the mic effect chain; empty string disables it";
   };
@@ -64,21 +78,21 @@ delib.module {
           "factory.name" = "support.null-audio-sink";
           "audio.position" = "FL,FR";
           "node.virtual" = true;
-        } // args;
+        }
+        // args;
       };
     in
     {
-      environment.systemPackages =
-        [
-          pkgs.pwvucontrol # move a single app's stream onto an FX sink
-        ]
-        ++ lib.optional cfg.carla.enable (withPipewireJack pkgs.carla)
-        ++ lib.optional cfg.easyeffects.enable pkgs.easyeffects
-        ++ lib.optionals cfg.yabridge.enable [
-          pkgs.yabridge
-          pkgs.yabridgectl
-          pkgs.wineWowPackages.staging
-        ];
+      environment.systemPackages = [
+        pkgs.pwvucontrol # move a single app's stream onto an FX sink
+      ]
+      ++ lib.optional cfg.carla.enable (withPipewireJack pkgs.carla)
+      ++ lib.optional cfg.easyeffects.enable pkgs.easyeffects
+      ++ lib.optionals cfg.yabridge.enable [
+        pkgs.yabridge
+        pkgs.yabridgectl
+        pkgs.wineWowPackages.staging
+      ];
 
       # Sinks apps can be moved onto, plus a virtual capture device: a plugin
       # host reads a sink's monitor, processes it, and writes the result back

@@ -1,13 +1,16 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.system.branding";
 
   options = {
     osa.system.branding = {
-      distroName = delib.description (delib.strOption "OSA")
-        "Human-readable OS name (NAME/PRETTY_NAME in /etc/os-release, DISTRIB_DESCRIPTION in /etc/lsb-release).";
-      distroId = delib.description (delib.strOption "osa")
-        "Lower-case OS id (ID in /etc/os-release, DISTRIB_ID in /etc/lsb-release). Anything other than \"nixos\" automatically gets ID_LIKE=nixos added by NixOS itself, which is what keeps distro-detection scripts treating this as NixOS-compatible.";
+      distroName = delib.description (delib.strOption "OSA") "Human-readable OS name (NAME/PRETTY_NAME in /etc/os-release, DISTRIB_DESCRIPTION in /etc/lsb-release).";
+      distroId = delib.description (delib.strOption "osa") "Lower-case OS id (ID in /etc/os-release, DISTRIB_ID in /etc/lsb-release). Anything other than \"nixos\" automatically gets ID_LIKE=nixos added by NixOS itself, which is what keeps distro-detection scripts treating this as NixOS-compatible.";
       vendorName = delib.description (delib.strOption "OSA") "Vendor name (VENDOR_NAME in /etc/os-release, part of CPE_NAME).";
       vendorId = delib.description (delib.strOption "osa") "Vendor id (part of CPE_NAME).";
 
@@ -45,8 +48,7 @@ delib.module {
       };
 
       plymouth = {
-        theme = delib.description (delib.strOption "nixos-bgrt")
-          "Default boot.plymouth.theme for hosts that enable Plymouth. No OSA-branded artwork exists yet, so this keeps NixOS' own theme.";
+        theme = delib.description (delib.strOption "nixos-bgrt") "Default boot.plymouth.theme for hosts that enable Plymouth. No OSA-branded artwork exists yet, so this keeps NixOS' own theme.";
         themePackages = lib.mkOption {
           type = lib.types.listOf lib.types.package;
           default = with pkgs; [ nixos-bgrt-plymouth ];

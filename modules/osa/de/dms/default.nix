@@ -1,4 +1,10 @@
-{ delib, lib, pkgs, inputs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 delib.module {
   name = "osa.de.dms";
 
@@ -41,25 +47,25 @@ delib.module {
     ];
   };
 
-  home.ifEnabled = { myconfig, ...}: {
+  home.ifEnabled = { myconfig, ... }: {
     programs.dank-material-shell = {
       enable = true;
       niri = {
-      #   enableKeybinds = true;   # Sets static preset keybinds
-        includes.enable = true;    # Enable config includes hack. Enabled by default.
-      #   enableSpawn = true;      # Auto-start DMS with niri, if enabled
+        #   enableKeybinds = true;   # Sets static preset keybinds
+        includes.enable = true; # Enable config includes hack. Enabled by default.
+        #   enableSpawn = true;      # Auto-start DMS with niri, if enabled
       };
       systemd = {
-        enable = true;             # Systemd service for auto-start
-        restartIfChanged = true;   # Auto-restart dms.service when dank-material-shell changes
+        enable = true; # Systemd service for auto-start
+        restartIfChanged = true; # Auto-restart dms.service when dank-material-shell changes
       };
 
       # Core features
-      enableSystemMonitoring = true;     # System monitoring widgets (dgop)
-      enableVPN = true;                  # VPN management widget
-      enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
+      enableSystemMonitoring = true; # System monitoring widgets (dgop)
+      enableVPN = true; # VPN management widget
+      enableDynamicTheming = true; # Wallpaper-based theming (matugen)
       # enableAudioWavelength = true;      # Audio visualizer (cava)
-      enableCalendarEvents = true;       # Calendar integration (khal)
+      enableCalendarEvents = true; # Calendar integration (khal)
       # enableClipboardPaste = true;       # Pasting items from the clipboard (wtype)
 
       settings = lib.importJSON ./settings.json;

@@ -1,4 +1,9 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.apps.cosmic";
 
@@ -16,15 +21,20 @@ delib.module {
     };
   };
 
-  home.ifEnabled = { cfg, ... }: let
-    packages = with pkgs; (
-      (lib.optionals cfg.files [ cosmic-files ])
-      ++ (lib.optionals cfg.reader.enable [ cfg.reader.pkg ])
-      ++ (lib.optionals cfg.calculator [ cosmic-ext-calculator ])
-      ++ (lib.optionals cfg.player [ cosmic-player ])
-      ++ (lib.optionals cfg.workspaces [ cosmic-workspaces-epoch ])
-    );
-  in {
-    home.packages = packages;
-  };
+  home.ifEnabled =
+    { cfg, ... }:
+    let
+      packages =
+        with pkgs;
+        (
+          (lib.optionals cfg.files [ cosmic-files ])
+          ++ (lib.optionals cfg.reader.enable [ cfg.reader.pkg ])
+          ++ (lib.optionals cfg.calculator [ cosmic-ext-calculator ])
+          ++ (lib.optionals cfg.player [ cosmic-player ])
+          ++ (lib.optionals cfg.workspaces [ cosmic-workspaces-epoch ])
+        );
+    in
+    {
+      home.packages = packages;
+    };
 }

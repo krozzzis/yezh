@@ -1,4 +1,9 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.apps.arduinoIde";
 
@@ -8,7 +13,10 @@ delib.module {
   };
 
   home.ifEnabled = { cfg, ... }: {
-    home.packages = [ cfg.pkg pkgs.python3 ];
+    home.packages = [
+      cfg.pkg
+      pkgs.python3
+    ];
   };
 
   nixos.ifEnabled = { myconfig, ... }: {

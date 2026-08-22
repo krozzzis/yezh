@@ -1,4 +1,10 @@
-{ delib, lib, pkgs, config, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 delib.module {
   name = "osa.system.audio";
 
@@ -36,16 +42,18 @@ delib.module {
     };
 
     services.pipewire.wireplumber.extraConfig."99-pro-audio" = lib.mkIf cfg.proAudio {
-      "monitor.alsa.rules" = [{
-        matches = [{ "device.name" = "~alsa_card.*"; }];
-        actions = {
-          "update-props" = {
-            "api.alsa.use-acp" = true;
-            "api.acp.auto-profile" = true;
-            "api.acp.default-profile" = "pro-audio";
+      "monitor.alsa.rules" = [
+        {
+          matches = [ { "device.name" = "~alsa_card.*"; } ];
+          actions = {
+            "update-props" = {
+              "api.alsa.use-acp" = true;
+              "api.acp.auto-profile" = true;
+              "api.acp.default-profile" = "pro-audio";
+            };
           };
-        };
-      }];
+        }
+      ];
     };
 
     security.rtkit.enable = true;
@@ -56,26 +64,31 @@ delib.module {
       qjackctl
     ];
 
-    boot.kernelModules = [ "snd-seq" "snd-rawmidi" ];
+    boot.kernelModules = [
+      "snd-seq"
+      "snd-rawmidi"
+    ];
 
     # power-profiles-daemon owns the governor once it's running and will
     # override a static one as the user switches profiles, so defer to its
     # own "performance" profile instead of fighting it for control.
-    powerManagement.cpuFreqGovernor =
-      lib.mkIf (cfg.performanceGovernor && !config.services.power-profiles-daemon.enable) "performance";
+    powerManagement.cpuFreqGovernor = lib.mkIf (
+      cfg.performanceGovernor && !config.services.power-profiles-daemon.enable
+    ) "performance";
 
     systemd.services.audio-performance-profile =
-      lib.mkIf (cfg.performanceGovernor && config.services.power-profiles-daemon.enable) {
-        description = "Select the power-profiles-daemon performance profile for low-latency audio";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "power-profiles-daemon.service" ];
-        requires = [ "power-profiles-daemon.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${pkgs.power-profiles-daemon}/bin/powerprofilesctl set performance";
+      lib.mkIf (cfg.performanceGovernor && config.services.power-profiles-daemon.enable)
+        {
+          description = "Select the power-profiles-daemon performance profile for low-latency audio";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "power-profiles-daemon.service" ];
+          requires = [ "power-profiles-daemon.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.power-profiles-daemon}/bin/powerprofilesctl set performance";
+          };
         };
-      };
 
     users.users.${myconfig.user.constants.username}.extraGroups = [
       "audio"

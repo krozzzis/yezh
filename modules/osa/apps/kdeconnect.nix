@@ -1,4 +1,9 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.apps.kdeconnect";
 
@@ -10,9 +15,19 @@ delib.module {
     programs.kdeconnect.enable = true;
 
     networking.firewall = {
-        enable = true;
-        allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
-        allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
-      };
+      enable = true;
+      allowedTCPPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        }
+      ];
+      allowedUDPPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        }
+      ];
+    };
   };
 }

@@ -1,10 +1,15 @@
-{ delib, inputs, pkgs, ... }:
+{
+  delib,
+  inputs,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.system.sddm";
 
   options = delib.singleEnableOption false;
 
-  nixos.always.imports = [inputs.silentSDDM.nixosModules.default];
+  nixos.always.imports = [ inputs.silentSDDM.nixosModules.default ];
 
   nixos.ifEnabled = {
     services.displayManager.sddm = {

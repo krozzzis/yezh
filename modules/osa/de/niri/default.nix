@@ -1,4 +1,10 @@
-{ delib, lib, inputs, pkgs, ... }:
+{
+  delib,
+  lib,
+  inputs,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "osa.de.niri";
 
@@ -6,7 +12,9 @@ delib.module {
     osa.de.niri.enable = delib.boolOption myconfig.user.gui.enable;
     osa.de.niri.launcher.default = lib.mkOption {
       type = lib.types.attrs;
-      default = { pkg = myconfig.osa.apps.walker.pkg; };
+      default = {
+        pkg = myconfig.osa.apps.walker.pkg;
+      };
     };
   };
 
@@ -52,7 +60,9 @@ delib.module {
 
     # use the gnome polkit rather than the kde one installed
     # by default with the niri flake
-    systemd.user.services.niri-flake-polkit = { enable = false; };
+    systemd.user.services.niri-flake-polkit = {
+      enable = false;
+    };
 
     environment.variables.NIXOS_OZONE_WL = "1";
 

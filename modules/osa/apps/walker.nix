@@ -1,18 +1,32 @@
-{ delib, lib, pkgs, inputs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 delib.module {
   name = "osa.apps.walker";
 
   options = { myconfig, ... }: {
     osa.apps.walker.enable = delib.boolOption false;
-    osa.apps.walker.pkg = delib.packageOption (inputs.walker.packages.${pkgs.stdenv.hostPlatform.system}.default or pkgs.walker);
+    osa.apps.walker.pkg = delib.packageOption (
+      inputs.walker.packages.${pkgs.stdenv.hostPlatform.system}.default or pkgs.walker
+    );
   };
 
   nixos.always.nix.settings = {
-    extra-substituters = ["https://walker.cachix.org" "https://walker-git.cachix.org"];
-    extra-trusted-public-keys = ["walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM=" "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="];
+    extra-substituters = [
+      "https://walker.cachix.org"
+      "https://walker-git.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
+      "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
+    ];
   };
 
-  home.always.imports = [inputs.walker.homeManagerModules.default];
+  home.always.imports = [ inputs.walker.homeManagerModules.default ];
 
   home.ifEnabled = {
     programs.walker = {

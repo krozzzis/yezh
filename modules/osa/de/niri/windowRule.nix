@@ -1,4 +1,10 @@
-{ delib, lib, pkgs, config, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 delib.module {
   name = "osa.de.niri";
 

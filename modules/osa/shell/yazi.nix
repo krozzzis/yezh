@@ -27,7 +27,9 @@ delib.module {
         opener = {
           edit = [
             {
-              run = ''${myconfig.user.editor.default.pkg.meta.mainProgram or (lib.getName myconfig.user.editor.default.pkg)} "$@"'';
+              run = ''${
+                myconfig.user.editor.default.pkg.meta.mainProgram or (lib.getName myconfig.user.editor.default.pkg)
+              } "$@"'';
               block = true;
               desc = "Editor";
             }
