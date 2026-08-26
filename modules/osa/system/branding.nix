@@ -46,15 +46,6 @@ delib.module {
         default = null;
         description = "BUG_REPORT_URL for /etc/os-release.";
       };
-
-      plymouth = {
-        theme = delib.description (delib.strOption "nixos-bgrt") "Default boot.plymouth.theme for hosts that enable Plymouth. No OSA-branded artwork exists yet, so this keeps NixOS' own theme.";
-        themePackages = lib.mkOption {
-          type = lib.types.listOf lib.types.package;
-          default = with pkgs; [ nixos-bgrt-plymouth ];
-          description = "Default boot.plymouth.themePackages matching osa.system.branding.plymouth.theme.";
-        };
-      };
     };
   };
 
@@ -91,8 +82,5 @@ delib.module {
       };
 
       environment.etc."issue".text = "${cfg.distroName} \\n \\l\n\n";
-
-      boot.plymouth.theme = lib.mkDefault cfg.plymouth.theme;
-      boot.plymouth.themePackages = lib.mkDefault cfg.plymouth.themePackages;
     };
 }
