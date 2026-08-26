@@ -10,7 +10,7 @@
 #
 # Everything else has a neutral default, so a headless server can ignore
 # the whole gui/shell surface.
-{ delib, lib, ... }:
+{ delib, lib, pkgs, ... }:
 let
   # A "default app" handle: an attrset carrying at least `.pkg`, so callers
   # can do `app.pkg.meta.mainProgram or (lib.getName app.pkg)`.
@@ -62,6 +62,24 @@ delib.module {
     user.gui.enable = delib.description (delib.boolOption false) "GUI mode: enables desktop-oriented osa modules by default";
 
     user.gui.fonts.nerdfonts = delib.description (delib.boolOption false) "Nerd Fonts for icons in terminal and GUI prompts";
+
+    user.fonts.regular = lib.mkOption {
+      type = lib.types.attrs;
+      default = {
+        pkg = pkgs.inter;
+        name = "Inter";
+      };
+      description = "Regular (sans-serif) font for UI — used in GTK/Qt/Plymouth/etc.";
+    };
+
+    user.fonts.monospace = lib.mkOption {
+      type = lib.types.attrs;
+      default = {
+        pkg = pkgs.jetbrains-mono;
+        name = "JetBrains Mono";
+      };
+      description = "Monospace font for terminals/editors — used in wezterm, editors, etc.";
+    };
 
     user.shell.enable = delib.description (delib.boolOption false) "Shell mode: enables CLI utility modules (eza, fzf, ripgrep, ...)";
 

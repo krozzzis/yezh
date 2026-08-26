@@ -16,9 +16,10 @@ delib.module {
     };
   };
 
-  nixos.ifEnabled = { cfg, ... }: {
+  nixos.ifEnabled = { cfg, myconfig, ... }: {
     boot.plymouth.enable = true;
     boot.plymouth.theme = lib.mkDefault cfg.theme;
     boot.plymouth.logo = lib.mkDefault cfg.logo;
+    boot.plymouth.font = lib.mkDefault "${myconfig.user.fonts.regular.pkg}/share/fonts/truetype/InterVariable.ttf";
   };
 }
