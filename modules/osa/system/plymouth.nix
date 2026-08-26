@@ -11,8 +11,8 @@ delib.module {
     };
     osa.system.plymouth.logo = lib.mkOption {
       type = lib.types.path;
-      default = ../shell/assets/osa-logo.png;
-      description = "Logo displayed by plymouth (PNG, 48x48 is GDM default but any size works). Used for spinner/spinfinity/bgrt watermark.";
+      default = ../../../assets/osa-logo-yellow.png;
+      description = "Logo displayed by plymouth (PNG, 48x48 is GDM default but any size works). Yellow on transparent, 1/4 size for plymouth watermark.";
     };
   };
 

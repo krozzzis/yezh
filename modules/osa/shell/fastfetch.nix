@@ -18,7 +18,7 @@ delib.module {
           # (assets/osa-logo.png, traced once into assets/osa-logo.txt).
           # Lines carry $1 placeholders so the wasp comes out wasp-colored.
           type = "file";
-          source = ./assets/osa-logo.txt;
+          source = ../../../assets/osa-logo.txt;
           color."1" = "yellow";
           padding.top = 2;
         };
