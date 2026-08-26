@@ -28,10 +28,15 @@ delib.module {
 
   home.always.imports = [ inputs.walker.homeManagerModules.default ];
 
-  home.ifEnabled = {
+  home.ifEnabled = { myconfig, ... }: {
     programs.walker = {
       enable = true;
       runAsService = true;
+      themes.default.style = ''
+        * {
+          font-family: "${myconfig.user.fonts.regular.name}", sans-serif;
+        }
+      '';
     };
 
     programs.elephant.enable = true;
