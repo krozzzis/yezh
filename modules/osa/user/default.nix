@@ -120,5 +120,11 @@ delib.module {
       default = { };
       description = "MCP servers exposed to AI tools (populated by osa.dev.mcp.* modules)";
     };
+
+    user.ui.transparency = lib.mkOption {
+      type = lib.types.float;
+      default = 0.9;
+      description = "Global UI transparency (0.0 fully transparent, 1.0 fully opaque) used for all supported apps (DMS, etc.)";
+    };
   };
 }

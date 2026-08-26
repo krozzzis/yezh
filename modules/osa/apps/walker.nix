@@ -32,11 +32,22 @@ delib.module {
     programs.walker = {
       enable = true;
       runAsService = true;
-      themes.default.style = ''
-        * {
-          font-family: "${myconfig.user.fonts.regular.name}", sans-serif;
-        }
-      '';
+      # Переопределяем только font-family, сохраняя полный дефолтный стиль walker.
+      # Без этого `themes.default.style` полностью перезаписывал бы
+      # resources/themes/default/style.css (walker homeManager просто пишет файл),
+      # оставляя тему без всех правил — отсюда "сломана" тема и неестественно большой шрифт.
+      themes.default.style =
+        let
+          baseStyle = builtins.readFile "${inputs.walker}/resources/themes/default/style.css";
+        in
+        baseStyle
+        + ''
+
+          /* OSA override: системный шрифт из user.fonts.regular */
+          * {
+            font-family: "${myconfig.user.fonts.regular.name}", sans-serif;
+          }
+        '';
     };
 
     programs.elephant.enable = true;
