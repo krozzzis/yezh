@@ -564,6 +564,26 @@
         "type": "github"
       }
     },
+    "plymouth-theme-material": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787808410,
+        "narHash": "sha256-wkyr1jdT+EoQjdL5Jbp4UXfjp2EJZ9O3Xwwk+bIe/N0=",
+        "owner": "krozzzis",
+        "repo": "plymouth-theme-material",
+        "rev": "6d7ef0e07b76320b67d53ce5c0ce5134f8278b31",
+        "type": "github"
+      },
+      "original": {
+        "owner": "krozzzis",
+        "repo": "plymouth-theme-material",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -619,6 +639,7 @@
         "nixpkgs": "nixpkgs_3",
         "nixvim": "nixvim",
         "ntfsplus": "ntfsplus",
+        "plymouth-theme-material": "plymouth-theme-material",
         "silentSDDM": "silentSDDM",
         "walker": "walker",
         "winapps": "winapps",
