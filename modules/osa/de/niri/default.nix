@@ -20,29 +20,24 @@ delib.module {
 
   nixos.always.imports = [ inputs.niri-pkgs.nixosModules.niri ];
 
+  nixos.always.nixpkgs.overlays = [
+    (final: prev: {
+      libdisplay-info_0_2 = prev.libdisplay-info.overrideAttrs (old: {
+        version = "0.2.0";
+        src = prev.fetchFromGitLab {
+          domain = "gitlab.freedesktop.org";
+          owner = "emersion";
+          repo = "libdisplay-info";
+          tag = "0.2.0";
+          hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
+        };
+      });
+    })
+    inputs.niri-pkgs.overlays.niri
+  ];
+
   nixos.ifEnabled = {
     programs.niri.enable = true;
-    # niri-unstable still hard-requires libdisplay-info 0.2 (its Rust
-    # bindings haven't been updated for 0.3's API yet), but nixpkgs has
-    # removed the versioned `libdisplay-info_0_2` attribute entirely. Build
-    # 0.2.0 ourselves and feed it in via an overlay so niri-flake's
-    # `callPackage` auto-arg resolution picks it up instead of nixpkgs'
-    # throwing alias.
-    nixpkgs.overlays = [
-      (final: prev: {
-        libdisplay-info_0_2 = prev.libdisplay-info.overrideAttrs (old: {
-          version = "0.2.0";
-          src = prev.fetchFromGitLab {
-            domain = "gitlab.freedesktop.org";
-            owner = "emersion";
-            repo = "libdisplay-info";
-            tag = "0.2.0";
-            hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
-          };
-        });
-      })
-      inputs.niri-pkgs.overlays.niri
-    ];
     # niri-unstable's `niri-session` wrapper calls `systemctl --user
     # import-environment` with no variable list, which systemd now warns
     # is deprecated ("Calling import-environment without a list of
