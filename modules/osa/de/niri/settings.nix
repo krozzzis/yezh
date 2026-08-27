@@ -8,10 +8,11 @@ delib.module {
       spawn-at-startup = [
         { argv = [ "xwayland-satellite" ]; }
         {
-          # clear clipboard at niri start
+          # clear clipboard at niri start — use sh -c to expand $XDG_CACHE_HOME, avoid WAYLAND_DISPLAY terminal flash
           argv = [
-            "rm"
-            "'$XDG_CACHE_HOME/cliphist/db'"
+            "sh"
+            "-c"
+            "rm -f \"$XDG_CACHE_HOME/cliphist/db\" 2>/dev/null || true"
           ];
         }
       ];
