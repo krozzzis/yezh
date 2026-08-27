@@ -1,4 +1,4 @@
-{ delib, lib, pkgs, inputs, ... }:
+{ delib, lib, pkgs, ... }:
 delib.module {
   name = "osa.system.plymouth";
 
@@ -19,7 +19,6 @@ delib.module {
   nixos.ifEnabled = { cfg, myconfig, ... }: {
     boot.plymouth.enable = true;
     boot.plymouth.theme = lib.mkDefault cfg.theme;
-    boot.plymouth.themePackages = [ inputs.plymouth-theme-material.packages.${pkgs.stdenv.hostPlatform.system}.plymouth-theme-material ];
     boot.plymouth.logo = lib.mkDefault cfg.logo;
     boot.plymouth.font = lib.mkDefault "${myconfig.user.fonts.regular.pkg}/share/fonts/truetype/InterVariable.ttf";
 

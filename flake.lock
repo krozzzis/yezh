@@ -34,11 +34,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1787753681,
-        "narHash": "sha256-GAVEulZKJS070iQBGcHoygX2M6OVXKiEICPD2SPj0VU=",
+        "lastModified": 1787797916,
+        "narHash": "sha256-sly+gs1Lyyn8BIei7ixGZWGK3s7PtQgSMb0N4hVecTc=",
         "owner": "caelestia-dots",
         "repo": "shell",
-        "rev": "a788c432d9274a123c113eed6d28a241ddfc2cdd",
+        "rev": "5debe20729833669018bf9aa46dd3be4015c6a6f",
         "type": "github"
       },
       "original": {
@@ -102,11 +102,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787703372,
-        "narHash": "sha256-IH1YtPCJHUUCSzlQ1xmvD4x4t+zaMKzZO+7pvP4J2r8=",
+        "lastModified": 1787801134,
+        "narHash": "sha256-slW6lQeqQsV0V+1+0tkceDd/IF2V91znQmCkO/WYk9U=",
         "owner": "AvengeMedia",
         "repo": "dms-plugin-registry",
-        "rev": "96664037a1a123750e6e1b3261706142e3a9354d",
+        "rev": "f402101d7e03832305d98ca50388f5c5e5969d7b",
         "type": "github"
       },
       "original": {
@@ -142,11 +142,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1787717002,
-        "narHash": "sha256-0USnDERfoTDeU6rUDkiVVJBszzenDzyjS1pYn3Saw1c=",
+        "lastModified": 1787803374,
+        "narHash": "sha256-XifOWuQ0wKbmggLycJzG5nC4CXYrX0i5CpeOwYqZ56M=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "529e243fc4261dd2be0cc8807f016f8f129c7e4a",
+        "rev": "36e9ecd6655041792fc07ba6ac5bd846a8f00994",
         "type": "gitlab"
       },
       "original": {
@@ -285,11 +285,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787778830,
-        "narHash": "sha256-GnLPpDT727E6VpDlALP8JeP1BbSQ17H0HiEEYq6Ql4w=",
+        "lastModified": 1787797243,
+        "narHash": "sha256-8+Q7NOB7RPajRjA4pbCDLzqH+MTjnG9x6LUPLfL2joA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "6b449e35980e1b75dd17da2d6d9b66e757194f1c",
+        "rev": "99c9ec63390f1d8c14d95d9e8b17cc29cfbd4e11",
         "type": "github"
       },
       "original": {
@@ -564,26 +564,6 @@
         "type": "github"
       }
     },
-    "plymouth-theme-material": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1787808410,
-        "narHash": "sha256-wkyr1jdT+EoQjdL5Jbp4UXfjp2EJZ9O3Xwwk+bIe/N0=",
-        "owner": "krozzzis",
-        "repo": "plymouth-theme-material",
-        "rev": "6d7ef0e07b76320b67d53ce5c0ce5134f8278b31",
-        "type": "github"
-      },
-      "original": {
-        "owner": "krozzzis",
-        "repo": "plymouth-theme-material",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -639,7 +619,6 @@
         "nixpkgs": "nixpkgs_3",
         "nixvim": "nixvim",
         "ntfsplus": "ntfsplus",
-        "plymouth-theme-material": "plymouth-theme-material",
         "silentSDDM": "silentSDDM",
         "walker": "walker",
         "winapps": "winapps",
