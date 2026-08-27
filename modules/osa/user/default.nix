@@ -123,7 +123,7 @@ delib.module {
 
     user.ui.transparency = lib.mkOption {
       type = lib.types.float;
-      default = 0.9;
+      default = 0.95;
       description = "Global UI transparency (0.0 fully transparent, 1.0 fully opaque) used for all supported apps (DMS, etc.)";
     };
   };

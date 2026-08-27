@@ -13,11 +13,16 @@ delib.module {
     programs.wezterm = {
       enable = true;
       settings = {
-        # Прозрачность берём из глобального ui.transparency, блюр — через Wayland ext-background-effect (niri его поддерживает).
-        # wayland_window_background_blur=true + window_background_opacity<1 даёт размытый фон за терминалом.
+        # Прозрачность — из глобального ui.transparency (95%), но для читаемости делаем фон темнее и текст непрозрачным.
         window_background_opacity = myconfig.user.ui.transparency;
-        text_background_opacity = myconfig.user.ui.transparency;
+        text_background_opacity = 1.0;
         wayland_window_background_blur = true;
+        colors = {
+          background = "#0a0a0a";
+          foreground = "#e0e0e0";
+          cursor_bg = "#e0e0e0";
+          cursor_fg = "#0a0a0a";
+        };
       };
     };
   };
