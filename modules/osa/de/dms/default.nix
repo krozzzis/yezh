@@ -94,6 +94,12 @@ delib.module {
         batterySuspendTimeout = 600;
         cornerRadius = cornerRadius;
         frameRounding = frameRounding;
+        # Композитор-специфичные оверрайды — синхронизируют gaps/rounding niri/hyprland с глобальными
+        niriLayoutGapsOverride = gap;
+        niriLayoutRadiusOverride = cornerRadius;
+        hyprlandLayoutGapsOverride = gap;
+        hyprlandLayoutGapsOutOverride = gap;
+        hyprlandLayoutRadiusOverride = cornerRadius;
         currentThemeName = "dynamic";
         currentThemeCategory = "dynamic";
         matugenTemplateHyprland = false;
