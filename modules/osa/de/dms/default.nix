@@ -58,74 +58,142 @@ delib.module {
   home.ifEnabled =
     { myconfig, ... }:
     let
-      # Глобальная прозрачность (0.0-1.0, default 0.9 = 90%) из user.ui.transparency / osa.ui.transparency.
-      # osa.ui.transparency по умолчанию наследует user.ui.transparency.
+      # Глобальные UI-переменные: прозрачность и скругления.
+      # osa.ui.* наследует user.ui.* — даунстрим правит только user.*.
       transparency =
         if myconfig ? osa && myconfig.osa ? ui && myconfig.osa.ui ? transparency then
           myconfig.osa.ui.transparency
         else
           myconfig.user.ui.transparency;
+      cornerRadius =
+        if myconfig ? osa && myconfig.osa ? ui && myconfig.osa.ui ? cornerRadius then
+          myconfig.osa.ui.cornerRadius
+        else
+          myconfig.user.ui.cornerRadius;
+      gap =
+        if myconfig ? osa && myconfig.osa ? ui && myconfig.osa.ui ? gap then
+          myconfig.osa.ui.gap
+        else
+          myconfig.user.ui.gap;
+      frameRounding =
+        if myconfig ? osa && myconfig.osa ? ui && myconfig.osa.ui ? frameRounding then
+          myconfig.osa.ui.frameRounding
+        else
+          cornerRadius + gap;
+      # Только изменённые опции DMS (всё остальное — upstream defaults из SettingsData.qml).
+      # Скругления: cornerRadius — глобальная переменная, frameRounding = cornerRadius + gap.
+      # Прозрачность синхронизирована с wezterm через тот же global transparency.
       baseSettings = {
         acLockTimeout = 600;
+        acMonitorTimeout = 300;
+        acSuspendBehavior = 2;
+        acSuspendTimeout = 1800;
+        batteryLockTimeout = 300;
+        batteryMonitorTimeout = 120;
+        batterySuspendBehavior = 2;
+        batterySuspendTimeout = 600;
+        cornerRadius = cornerRadius;
+        frameRounding = frameRounding;
         currentThemeName = "dynamic";
+        currentThemeCategory = "dynamic";
+        matugenTemplateHyprland = false;
+        matugenTemplateMangowc = false;
+        notificationHistoryEnabled = false;
+        updaterHideWidget = true;
+        workspaceOccupiedColorMode = "s";
+        lockBeforeSuspend = true;
         controlCenterWidgets = [
-            {
+          {
             enabled = true;
             id = "volumeSlider";
             width = 50;
           }
-            {
+          {
             enabled = true;
             id = "brightnessSlider";
             width = 50;
           }
-            {
+          {
             enabled = true;
             id = "wifi";
             width = 50;
           }
-            {
+          {
             enabled = true;
             id = "bluetooth";
             width = 50;
           }
-            {
+          {
             enabled = true;
             id = "audioOutput";
             width = 50;
           }
-            {
+          {
             enabled = true;
             id = "audioInput";
             width = 50;
           }
-            {
+          {
             enabled = true;
             id = "darkMode";
             width = 50;
           }
-            {
+          {
             enabled = true;
             id = "nightMode";
             width = 50;
           }
-            {
+          {
             id = "plugin_dankKDEConnect";
             enabled = true;
             width = 50;
           }
-          ];
-        acMonitorTimeout = 300;
-        batterySuspendTimeout = 600;
-        workspaceOccupiedColorMode = "s";
-        matugenTemplateHyprland = false;
-        batterySuspendBehavior = 2;
-        batteryLockTimeout = 300;
-        cornerRadius = 12;
-        updaterHideWidget = true;
-        notificationHistoryEnabled = false;
+        ];
         barConfigs = [
-            {
+          {
+            id = "default";
+            name = "Main Bar";
+            enabled = true;
+            position = 3;
+            screenPreferences = [ "all" ];
+            showOnLastDisplay = true;
+            leftWidgets = [
+              "launcherButton"
+              {
+                enabled = true;
+                id = "systemTray";
+              }
+            ];
+            centerWidgets = [
+              {
+                enabled = true;
+                id = "workspaceSwitcher";
+              }
+            ];
+            rightWidgets = [
+              {
+                id = "keyboard_layout_name";
+                enabled = true;
+                keyboardLayoutNameCompactMode = false;
+              }
+              {
+                id = "battery";
+                enabled = true;
+              }
+              {
+                id = "volumeMixer";
+                enabled = true;
+              }
+              {
+                id = "controlCenterButton";
+                enabled = true;
+              }
+              {
+                id = "clock";
+                enabled = true;
+                clockCompactMode = true;
+              }
+            ];
             autoHide = false;
             autoHideDelay = 250;
             borderColor = "surfaceText";
@@ -133,67 +201,24 @@ delib.module {
             borderOpacity = 0.39;
             borderThickness = 1;
             bottomGap = 0;
-            centerWidgets = [
-                {
-                enabled = true;
-                id = "workspaceSwitcher";
-              }
-              ];
             clickThrough = false;
-            enabled = true;
             fontScale = 1;
             gothCornerRadiusOverride = false;
-            gothCornerRadiusValue = 12;
+            gothCornerRadiusValue = frameRounding;
             gothCornersEnabled = false;
             iconScale = 1;
-            id = "default";
             innerPadding = 4;
-            leftWidgets = [
-                "launcherButton"
-                {
-                enabled = true;
-                id = "systemTray";
-              }
-              ];
             maximizeDetection = true;
             maximizeWidgetIcons = false;
             maximizeWidgetText = false;
-            name = "Main Bar";
             noBackground = true;
             openOnOverview = true;
             popupGapsAuto = true;
             popupGapsManual = 5;
-            position = 3;
             removeWidgetPadding = false;
-            rightWidgets = [
-                {
-                id = "keyboard_layout_name";
-                enabled = true;
-                keyboardLayoutNameCompactMode = false;
-              }
-                {
-                id = "battery";
-                enabled = true;
-              }
-                {
-                id = "volumeMixer";
-                enabled = true;
-              }
-                {
-                id = "controlCenterButton";
-                enabled = true;
-              }
-                {
-                id = "clock";
-                enabled = true;
-                clockCompactMode = true;
-              }
-              ];
-            screenPreferences = [ "all" ];
             scrollXBehavior = "column";
             scrollYBehavior = "workspace";
             shadowIntensity = 0;
-            showOnLastDisplay = true;
             spacing = 4;
             squareCorners = false;
             transparency = 1;
@@ -203,13 +228,7 @@ delib.module {
             widgetPadding = 8;
             widgetTransparency = 1;
           }
-          ];
-        currentThemeCategory = "dynamic";
-        lockBeforeSuspend = true;
-        batteryMonitorTimeout = 120;
-        acSuspendBehavior = 2;
-        matugenTemplateMangowc = false;
-        acSuspendTimeout = 1800;
+        ];
       };
       barConfigs' = map (
         bar: bar // {
@@ -240,15 +259,13 @@ delib.module {
         enableCalendarEvents = true; # Calendar integration (khal)
 
         settings = baseSettings // {
-          # Прозрачность для всех элементов DMS
+          # Прозрачность для всех элементов DMS — синхронизирована с wezterm (global transparency)
           popupTransparency = transparency;
           dockTransparency = transparency;
           desktopClockTransparency = transparency;
           systemMonitorTransparency = transparency;
-          # Блюр для всех слоёв
+          # Блюр: только изменённая опция (defaults: blurForegroundLayers=true, blurBorderEnabled=true — не пишем)
           blurEnabled = true;
-          blurForegroundLayers = true;
-          blurBorderEnabled = true;
           # Переопределяем бары глобальной прозрачностью
           barConfigs = barConfigs';
           # Шрифты из глобальных user.fonts — иначе fallback даёт неестественно большой размер

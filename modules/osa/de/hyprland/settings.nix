@@ -2,13 +2,16 @@
 delib.module {
   name = "osa.de.hyprland";
 
-  home.ifEnabled = {
+  home.ifEnabled = { myconfig, ... }: {
     wayland.windowManager.hyprland = {
       settings = {
         general = {
-          gaps_in = 0;
-          gaps_out = 0;
-          border_size = 20;
+          gaps_in = myconfig.osa.ui.gap;
+          gaps_out = myconfig.osa.ui.gap;
+          border_size = 2;
+        };
+        decoration = {
+          rounding = myconfig.osa.ui.cornerRadius;
         };
       };
     };

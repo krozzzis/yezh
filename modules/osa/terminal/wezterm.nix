@@ -13,8 +13,8 @@ delib.module {
     programs.wezterm = {
       enable = true;
       settings = {
-        # Прозрачность — из глобального ui.transparency (95%), но для читаемости делаем фон темнее и текст непрозрачным.
-        window_background_opacity = myconfig.user.ui.transparency;
+        # Прозрачность синхронизирована с DMS панелью через глобальный osa.ui.transparency (default 0.95)
+        window_background_opacity = myconfig.osa.ui.transparency;
         text_background_opacity = 1.0;
         wayland_window_background_blur = true;
         colors = {

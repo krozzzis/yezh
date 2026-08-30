@@ -8,17 +8,21 @@
 delib.module {
   name = "osa.de.niri";
 
-  home.ifEnabled = {
-    programs.niri.settings.window-rules = [
-      {
-        geometry-corner-radius = {
-          top-left = 8.0;
-          top-right = 8.0;
-          bottom-left = 8.0;
-          bottom-right = 8.0;
-        };
-        clip-to-geometry = true;
-      }
+  home.ifEnabled = { myconfig, ... }: {
+    programs.niri.settings.window-rules =
+      let
+        r = myconfig.osa.ui.cornerRadius * 1.0;
+      in
+      [
+        {
+          geometry-corner-radius = {
+            top-left = r;
+            top-right = r;
+            bottom-left = r;
+            bottom-right = r;
+          };
+          clip-to-geometry = true;
+        }
 
       {
         matches = [

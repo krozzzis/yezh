@@ -6,6 +6,24 @@ delib.module {
   name = "osa.de.niri";
 
   home.ifEnabled = { myconfig, ... }: {
-    programs.niri.settings.binds = t.toNiriBinds { inherit myconfig; };
+    programs.niri.settings.binds = t.toNiriBinds { inherit myconfig; } // {
+      "Mod+WheelScrollLeft" = {
+        action."focus-column-left" = [ ];
+        "cooldown-ms" = 150;
+      };
+      "Mod+WheelScrollRight" = {
+        action."focus-column-right" = [ ];
+        "cooldown-ms" = 150;
+      };
+      # Дублируем для Super на случай winit/совместимости (в niri Mod == Super)
+      "Super+WheelScrollLeft" = {
+        action."focus-column-left" = [ ];
+        "cooldown-ms" = 150;
+      };
+      "Super+WheelScrollRight" = {
+        action."focus-column-right" = [ ];
+        "cooldown-ms" = 150;
+      };
+    };
   };
 }

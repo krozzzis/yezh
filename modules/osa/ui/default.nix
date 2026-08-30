@@ -9,6 +9,27 @@ delib.module {
       defaultText = lib.literalExpression "myconfig.user.ui.transparency";
       description = "Global UI transparency (0.0 fully transparent, 1.0 fully opaque) for all OSA apps. Defaults to user.ui.transparency (0.9 = 90%).";
     };
+
+    osa.ui.cornerRadius = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = myconfig.user.ui.cornerRadius;
+      defaultText = lib.literalExpression "myconfig.user.ui.cornerRadius";
+      description = "Global window corner radius (see user.ui.cornerRadius). Frame rounding is derived as cornerRadius + gap.";
+    };
+
+    osa.ui.gap = lib.mkOption {
+      type = lib.types.ints.unsigned;
+      default = myconfig.user.ui.gap;
+      defaultText = lib.literalExpression "myconfig.user.ui.gap";
+      description = "Global compositor gap (see user.ui.gap). Used with cornerRadius to derive frameRounding.";
+    };
+
+    osa.ui.frameRounding = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = myconfig.osa.ui.cornerRadius + myconfig.osa.ui.gap;
+      defaultText = lib.literalExpression "myconfig.osa.ui.cornerRadius + myconfig.osa.ui.gap";
+      description = "Frame (outer) corner radius derived as window cornerRadius + gap. Override only if you need an independent frame radius.";
+    };
   };
 
   # Глобальные шрифты: ставим пакеты из user.fonts в систему,

@@ -2,10 +2,10 @@
 delib.module {
   name = "osa.de.niri";
 
-  home.ifEnabled = {
+  home.ifEnabled = { myconfig, ... }: {
     programs.niri.settings = {
       layout = {
-        gaps = 8;
+        gaps = myconfig.osa.ui.gap;
 
         border.width = 2;
       };

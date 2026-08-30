@@ -126,5 +126,17 @@ delib.module {
       default = 0.95;
       description = "Global UI transparency (0.0 fully transparent, 1.0 fully opaque) used for all supported apps (DMS, etc.)";
     };
+
+    user.ui.cornerRadius = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 12;
+      description = "Global window corner radius in pixels — used for DMS, niri, hyprland and other compositor window rules. Frame (outer) rounding is derived as cornerRadius + gap.";
+    };
+
+    user.ui.gap = lib.mkOption {
+      type = lib.types.ints.unsigned;
+      default = 8;
+      description = "Global compositor gap in pixels — used for niri/hyprland layout gaps and to derive DMS frameRounding (frameRounding = cornerRadius + gap).";
+    };
   };
 }
